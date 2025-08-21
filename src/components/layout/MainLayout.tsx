@@ -1,3 +1,4 @@
+import Footer from "./Footer";
 import Navbar from "./Navbar";
 
 const MainLayout = ({ children }: { children: React.ReactNode }) => {
@@ -5,7 +6,7 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
 		<main className="flex flex-col min-h-screen">
 			<Navbar />
 			<div className="flex-grow container mx-auto">{children}</div>
-			<footer>This is footer (Coming Soon)</footer>
+			<Footer />
 		</main>
 	);
 };
