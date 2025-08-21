@@ -1,6 +1,7 @@
 import App from "@/App";
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import Login from "@/pages/auth/login";
+import Register from "@/pages/auth/register";
 import Profile from "@/pages/dashboard/profile";
 import Home from "@/pages/public/home";
 import { createBrowserRouter } from "react-router";
@@ -19,6 +20,10 @@ export const router = createBrowserRouter([
 	{
 		path: "/login",
 		Component: Login,
+	},
+	{
+		path: "/register",
+		Component: Register,
 	},
 	{
 		path: "/dashboard",

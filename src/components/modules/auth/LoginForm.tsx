@@ -19,17 +19,7 @@ import { z } from "zod";
 
 const loginSchema = z.object({
 	email: z.email("Invalid email format").toLowerCase(),
-	password: z
-		.string("Password is required")
-		.min(8, "Password must be at least 8 characters long")
-		.max(100, "Password cannot exceed 100 characters")
-		.regex(/[A-Z]/, "Password must contain at least 1 uppercase letter")
-		.regex(/[a-z]/, "Password must contain at least 1 lowercase letter")
-		.regex(/[0-9]/, "Password must contain at least 1 number")
-		.regex(
-			/[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/,
-			"Password must contain at least 1 special character"
-		),
+	password: z.string().min(1, "Password is required"),
 });
 
 const LoginForm = () => {
