@@ -1,0 +1,168 @@
+import { Button } from "@/components/ui/button";
+import {
+	Form,
+	FormControl,
+	FormDescription,
+	FormField,
+	FormItem,
+	FormLabel,
+	FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { EyeIcon, EyeOffIcon, Loader2Icon } from "lucide-react";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { Link } from "react-router";
+import { toast } from "sonner";
+import { z } from "zod";
+
+const loginSchema = z.object({
+	email: z.email("Invalid email format").toLowerCase(),
+	password: z
+		.string("Password is required")
+		.min(8, "Password must be at least 8 characters long")
+		.max(100, "Password cannot exceed 100 characters")
+		.regex(/[A-Z]/, "Password must contain at least 1 uppercase letter")
+		.regex(/[a-z]/, "Password must contain at least 1 lowercase letter")
+		.regex(/[0-9]/, "Password must contain at least 1 number")
+		.regex(
+			/[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/,
+			"Password must contain at least 1 special character"
+		),
+});
+
+const LoginForm = () => {
+	const [isLoading, setIsLoading] = useState(false);
+	const [isVisible, setIsVisible] = useState<boolean>(false);
+	const form = useForm<z.infer<typeof loginSchema>>({
+		resolver: zodResolver(loginSchema),
+		defaultValues: {
+			email: "",
+			password: "",
+		},
+	});
+	const onSubmit = (data: z.infer<typeof loginSchema>) => {
+		setIsLoading(true);
+
+		try {
+			// TODO: Implement login logic
+			throw new Error("Login functionality is not implemented yet.");
+			console.log("Form submitted:", data);
+			toast.success("Login successful!", {
+				richColors: true,
+			});
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		} catch (error: any) {
+			console.error("Login failed:", error);
+			toast.error(error.message, {
+				richColors: true,
+			});
+		} finally {
+			setIsLoading(false);
+		}
+	};
+
+	const toggleVisibility = () => setIsVisible((prevState) => !prevState);
+
+	return (
+		<Form {...form}>
+			<form
+				onSubmit={form.handleSubmit(onSubmit)}
+				className="space-y-8"
+			>
+				<FormField
+					control={form.control}
+					name="email"
+					render={({ field }) => (
+						<FormItem>
+							<FormLabel>Email</FormLabel>
+							<FormControl>
+								<Input
+									placeholder="Enter your email"
+									{...field}
+								/>
+							</FormControl>
+							<FormDescription className="sr-only">
+								This is your email address.
+							</FormDescription>
+							<FormMessage />
+						</FormItem>
+					)}
+				/>
+				<FormField
+					control={form.control}
+					name="password"
+					render={({ field }) => (
+						<FormItem>
+							<div className="flex items-center justify-between">
+								<FormLabel>Password</FormLabel>
+								<Link
+									to="/forgot-password"
+									className="text-sm text-muted-foreground hover:underline"
+								>
+									Forgot Password?
+								</Link>
+							</div>
+							<FormControl>
+								<div className="relative">
+									<Input
+										className="pe-9"
+										placeholder="Password"
+										{...field}
+										type={isVisible ? "text" : "password"}
+									/>
+									<Button
+										className="absolute inset-y-0 end-0"
+										variant="link"
+										type="button"
+										onClick={toggleVisibility}
+										aria-label={
+											isVisible
+												? "Hide password"
+												: "Show password"
+										}
+										aria-pressed={isVisible}
+										aria-controls="password"
+									>
+										{isVisible ? (
+											<EyeOffIcon
+												size={16}
+												aria-hidden="true"
+											/>
+										) : (
+											<EyeIcon
+												size={16}
+												aria-hidden="true"
+											/>
+										)}
+									</Button>
+								</div>
+							</FormControl>
+							<FormDescription className="sr-only">
+								This is your password.
+							</FormDescription>
+							<FormMessage />
+						</FormItem>
+					)}
+				/>
+				<Button
+					type="submit"
+					className="w-full"
+					disabled={isLoading}
+				>
+					{isLoading ? (
+						<>
+							<Loader2Icon className="animate-spin" />
+							Please wait
+						</>
+					) : (
+						"Login"
+					)}
+				</Button>
+			</form>
+		</Form>
+	);
+};
+
+export default LoginForm;

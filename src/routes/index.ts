@@ -1,5 +1,6 @@
 import App from "@/App";
 import DashboardLayout from "@/components/layout/DashboardLayout";
+import Login from "@/pages/auth/login";
 import Profile from "@/pages/dashboard/profile";
 import Home from "@/pages/public/home";
 import { createBrowserRouter } from "react-router";
@@ -14,6 +15,10 @@ export const router = createBrowserRouter([
 				Component: Home,
 			},
 		],
+	},
+	{
+		path: "/login",
+		Component: Login,
 	},
 	{
 		path: "/dashboard",
