@@ -1,6 +1,6 @@
 import App from "@/App";
 import DashboardLayout from "@/components/layout/DashboardLayout";
-import Routes from "@/pages/dashboard/routes";
+import Profile from "@/pages/dashboard/profile";
 import Home from "@/pages/public/home";
 import { createBrowserRouter } from "react-router";
 
@@ -21,7 +21,7 @@ export const router = createBrowserRouter([
 		children: [
 			{
 				index: true,
-				Component: Routes,
+				Component: Profile,
 			},
 		],
 	},
