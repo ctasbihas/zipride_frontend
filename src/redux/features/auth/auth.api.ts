@@ -9,7 +9,14 @@ const authApi = baseApi.injectEndpoints({
 				data: credentials,
 			}),
 		}),
+		register: builder.mutation({
+			query: (payload) => ({
+				url: "/user/register",
+				method: "POST",
+				data: payload,
+			}),
+		}),
 	}),
 });
 
-export const { useLoginMutation } = authApi;
+export const { useLoginMutation, useRegisterMutation } = authApi;

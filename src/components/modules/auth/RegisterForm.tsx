@@ -9,6 +9,7 @@ import {
 	FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useRegisterMutation } from "@/redux/features/auth/auth.api";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
 	EyeIcon,
@@ -59,6 +60,7 @@ const RegisterForm = () => {
 	const [isLoading, setIsLoading] = useState(false);
 	const [isVisible, setIsVisible] = useState<boolean>(false);
 	const [isConfirmVisible, setIsConfirmVisible] = useState<boolean>(false);
+	const [register] = useRegisterMutation();
 	const form = useForm<z.infer<typeof registerSchema>>({
 		resolver: zodResolver(registerSchema),
 		defaultValues: {
@@ -69,23 +71,21 @@ const RegisterForm = () => {
 			role: "rider",
 		},
 	});
-	const onSubmit = (data: z.infer<typeof registerSchema>) => {
+	const onSubmit = async (data: z.infer<typeof registerSchema>) => {
 		setIsLoading(true);
 
 		try {
-			// TODO: Implement registration logic
-			throw new Error(
-				"Registration functionality is not implemented yet."
-			);
-			console.log("Form submitted:", data);
+			const result = await register(data).unwrap();
+			console.log("Form submitted:", result);
 			toast.success("Registration successful!", {
 				richColors: true,
+				position: "top-center",
 			});
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		} catch (error: any) {
-			console.error("Registration failed:", error);
-			toast.error(error.message, {
+			toast.error(error.data.message, {
 				richColors: true,
+				position: "top-center",
 			});
 		} finally {
 			setIsLoading(false);
@@ -293,7 +293,7 @@ const RegisterForm = () => {
 							Please wait
 						</>
 					) : (
-						"Login"
+						"Register"
 					)}
 				</Button>
 			</form>
