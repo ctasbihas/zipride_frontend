@@ -9,6 +9,7 @@ import {
 	FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useLoginMutation } from "@/redux/features/auth/auth.api";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { EyeIcon, EyeOffIcon, Loader2Icon } from "lucide-react";
 import { useState } from "react";
@@ -25,6 +26,7 @@ const loginSchema = z.object({
 const LoginForm = () => {
 	const [isLoading, setIsLoading] = useState(false);
 	const [isVisible, setIsVisible] = useState<boolean>(false);
+	const [login] = useLoginMutation();
 	const form = useForm<z.infer<typeof loginSchema>>({
 		resolver: zodResolver(loginSchema),
 		defaultValues: {
@@ -32,22 +34,29 @@ const LoginForm = () => {
 			password: "",
 		},
 	});
-	const onSubmit = (data: z.infer<typeof loginSchema>) => {
+	const onSubmit = async (data: z.infer<typeof loginSchema>) => {
 		setIsLoading(true);
-
 		try {
-			// TODO: Implement login logic
-			throw new Error("Login functionality is not implemented yet.");
-			console.log("Form submitted:", data);
-			toast.success("Login successful!", {
+			const result = await login(data).unwrap();
+
+			toast.success(result.message, {
 				richColors: true,
+				position: "top-center",
 			});
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		} catch (error: any) {
-			console.error("Login failed:", error);
-			toast.error(error.message, {
-				richColors: true,
-			});
+			console.log(error);
+			const status = error?.status ?? error?.originalStatus;
+			if (status === 401) {
+				const message = "Invalid credentials";
+				form.setError("email", { type: "server", message });
+				form.setError("password", { type: "server", message });
+			} else {
+				toast.error("Login failed", {
+					position: "top-center",
+					richColors: true,
+				});
+			}
 		} finally {
 			setIsLoading(false);
 		}
