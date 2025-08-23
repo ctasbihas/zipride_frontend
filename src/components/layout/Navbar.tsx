@@ -7,20 +7,42 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useUserQuery } from "@/redux/features/auth/auth.api";
+import {
+	authApi,
+	useLogoutMutation,
+	useUserQuery,
+} from "@/redux/features/auth/auth.api";
+import { useAppDispatch } from "@/redux/hook";
 import { LogOut, Menu, Shield, X } from "lucide-react";
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { toast } from "sonner";
 import { ThemeToggle } from "../ui/theme-toggle";
 
 const Navbar = () => {
 	const [isOpen, setIsOpen] = useState(false);
 	const { data, isSuccess } = useUserQuery(undefined);
+	const [logout] = useLogoutMutation();
 	const isAuthenticated = isSuccess && data.success;
 	const location = useLocation();
+	const dispatch = useAppDispatch();
 
-	const handleLogout = () => {
-		console.log("TODO: Logout");
+	const handleLogout = async () => {
+		try {
+			await logout(undefined).unwrap();
+			toast.success("Logged out successfully", {
+				position: "top-center",
+				richColors: true,
+			});
+		} catch (err) {
+			toast.error("Failed to log out", {
+				position: "top-center",
+				richColors: true,
+			});
+			console.error(err);
+		} finally {
+			dispatch(authApi.util.resetApiState());
+		}
 	};
 
 	const navLinks = [
