@@ -58,7 +58,7 @@ const LoginForm = () => {
 					position: "top-center",
 					richColors: true,
 				});
-				navigate("/block");
+				navigate("/block", { state: { email: data.email } });
 			} else {
 				toast.error("Login failed", {
 					position: "top-center",
