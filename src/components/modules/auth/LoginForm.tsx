@@ -14,7 +14,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { EyeIcon, EyeOffIcon, Loader2Icon } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { toast } from "sonner";
 import { z } from "zod";
 
@@ -27,6 +27,7 @@ const LoginForm = () => {
 	const [isLoading, setIsLoading] = useState(false);
 	const [isVisible, setIsVisible] = useState<boolean>(false);
 	const [login] = useLoginMutation();
+	const navigate = useNavigate();
 	const form = useForm<z.infer<typeof loginSchema>>({
 		resolver: zodResolver(loginSchema),
 		defaultValues: {
@@ -43,14 +44,21 @@ const LoginForm = () => {
 				richColors: true,
 				position: "top-center",
 			});
+
+			navigate("/dashboard");
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		} catch (error: any) {
-			console.log(error);
-			const status = error?.status ?? error?.originalStatus;
+			const status = error.data.statusCode;
 			if (status === 401) {
 				const message = "Invalid credentials";
 				form.setError("email", { type: "server", message });
 				form.setError("password", { type: "server", message });
+			} else if (status === 403) {
+				toast.error(error.data.message, {
+					position: "top-center",
+					richColors: true,
+				});
+				navigate("/block");
 			} else {
 				toast.error("Login failed", {
 					position: "top-center",

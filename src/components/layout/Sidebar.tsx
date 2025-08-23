@@ -1,16 +1,13 @@
+import { useUserQuery } from "@/redux/features/auth/auth.api";
 import { Link } from "react-router";
 import { Button } from "../ui/button";
 
 const Sidebar = () => {
-	// TODO: User from redux
-	const user = {
-		name: "string",
-		email: "ctasbihas@zipride.com",
-		role: "admin",
-	};
+	const { data, isSuccess } = useUserQuery(undefined);
+	const isAuthenticated = isSuccess && data.success;
 
 	const getNavigationLinks = () => {
-		switch (user.role) {
+		switch (isAuthenticated && data.data.role) {
 			case "admin":
 				return [
 					{
@@ -457,14 +454,16 @@ const Sidebar = () => {
 			<div className="mt-auto rounded-lg border p-3 bg-sidebar-accent border-sidebar-border">
 				<div className="flex items-center gap-3">
 					<span className="grid h-9 w-9 place-items-center rounded-full bg-sidebar-foreground text-2xl font-bold text-sidebar">
-						{user.name.charAt(0).toUpperCase()}
+						{isAuthenticated
+							? data.data.name.charAt(0).toUpperCase()
+							: ""}
 					</span>
 					<div className="min-w-0 flex-1">
 						<h3 className="truncate text-sm font-medium">
-							{user.name}
+							{isAuthenticated ? data.data.name : ""}
 						</h3>
 						<h4 className="truncate text-xs text-muted-foreground">
-							{user.email}
+							{isAuthenticated ? data.data.email : ""}
 						</h4>
 					</div>
 

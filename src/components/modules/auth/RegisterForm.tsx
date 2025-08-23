@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router";
 import { toast } from "sonner";
 import { z } from "zod";
 
@@ -60,6 +61,7 @@ const RegisterForm = () => {
 	const [isLoading, setIsLoading] = useState(false);
 	const [isVisible, setIsVisible] = useState<boolean>(false);
 	const [isConfirmVisible, setIsConfirmVisible] = useState<boolean>(false);
+	const navigate = useNavigate();
 	const [register] = useRegisterMutation();
 	const form = useForm<z.infer<typeof registerSchema>>({
 		resolver: zodResolver(registerSchema),
@@ -76,11 +78,13 @@ const RegisterForm = () => {
 
 		try {
 			const result = await register(data).unwrap();
-			console.log("Form submitted:", result);
-			toast.success("Registration successful!", {
+
+			toast.success(result.message, {
 				richColors: true,
 				position: "top-center",
 			});
+
+			navigate("/dashboard");
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		} catch (error: any) {
 			toast.error(error.data.message, {

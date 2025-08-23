@@ -7,6 +7,7 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useUserQuery } from "@/redux/features/auth/auth.api";
 import { LogOut, Menu, Shield, X } from "lucide-react";
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
@@ -14,16 +15,9 @@ import { ThemeToggle } from "../ui/theme-toggle";
 
 const Navbar = () => {
 	const [isOpen, setIsOpen] = useState(false);
+	const { data, isSuccess } = useUserQuery(undefined);
+	const isAuthenticated = isSuccess && data.success;
 	const location = useLocation();
-
-	// TODO: Get the current user data.
-	const isAuthenticated = false;
-	const user = {
-		name: "Test Rider",
-		email: "testrider@zipride.com",
-		role: "rider",
-		isBlocked: false,
-	};
 
 	const handleLogout = () => {
 		console.log("TODO: Logout");
@@ -69,7 +63,7 @@ const Navbar = () => {
 					</div>
 
 					<div className="hidden md:flex items-center space-x-4">
-						{isAuthenticated && user ? (
+						{isAuthenticated ? (
 							<div className="flex items-center space-x-4">
 								<Link to="/dashboard">
 									<Button
@@ -88,10 +82,13 @@ const Navbar = () => {
 											className="relative h-10 w-10 rounded-full hover-lift"
 										>
 											<Avatar className="h-10 w-10">
-												<AvatarFallback className="bg-gradient-primary text-white font-semibold">
-													{user.name
-														.charAt(0)
-														.toUpperCase()}
+												<AvatarFallback className="text-foreground font-semibold">
+													{isAuthenticated &&
+													data.data.name
+														? data.data.name
+																.charAt(0)
+																.toUpperCase()
+														: ""}
 												</AvatarFallback>
 											</Avatar>
 										</Button>
@@ -103,10 +100,14 @@ const Navbar = () => {
 									>
 										<div className="flex flex-col space-y-1 p-2">
 											<p className="text-sm font-medium leading-none">
-												{user.name}
+												{isAuthenticated && data.data
+													? data.data.name
+													: ""}
 											</p>
 											<p className="text-xs leading-none text-muted-foreground">
-												{user.email}
+												{isAuthenticated
+													? data.data.email
+													: ""}
 											</p>
 										</div>
 
@@ -122,17 +123,15 @@ const Navbar = () => {
 								</DropdownMenu>
 							</div>
 						) : (
-							<div className="flex items-center space-x-3">
-								<Link to="/login">
-									<Button
-										variant="default"
-										size="sm"
-										className="hover-lift"
-									>
-										Login
-									</Button>
-								</Link>
-							</div>
+							<Link to="/login">
+								<Button
+									variant="default"
+									size="sm"
+									className="hover-lift"
+								>
+									Login
+								</Button>
+							</Link>
 						)}
 						<ThemeToggle />
 					</div>
@@ -174,7 +173,7 @@ const Navbar = () => {
 							))}
 
 							<div className="border-t border-border/50 pt-3 mt-3">
-								{isAuthenticated && user ? (
+								{isAuthenticated ? (
 									<div className="space-y-3">
 										<Link
 											to={"/dashboard"}
