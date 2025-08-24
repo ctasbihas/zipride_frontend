@@ -1,8 +1,10 @@
+import Banner from "@/components/modules/home/Banner";
+
 const Home = () => {
 	return (
-		<div>
-			<h1>Hello, src/pages/public/home.tsx</h1>
-		</div>
+		<main>
+			<Banner />
+		</main>
 	);
 };
 
