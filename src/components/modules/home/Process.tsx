@@ -6,28 +6,28 @@ import { Link } from "react-router";
 const Process = () => {
 	const steps = [
 		{
-			icon: <UserPlus className="h-8 w-8 text-emerald-600" />,
+			icon: <UserPlus className="h-8 w-8 text-primary" />,
 			title: "Create Account",
 			description:
 				"Sign up with your email. Get started with ZipRide's seamless transportation experience.",
 			step: "01",
 		},
 		{
-			icon: <MapPin className="h-8 w-8 text-emerald-600" />,
+			icon: <MapPin className="h-8 w-8 text-primary" />,
 			title: "Request for Ride",
 			description:
 				"Enter your pickup location and destination with fare total passengers.",
 			step: "02",
 		},
 		{
-			icon: <Car className="h-8 w-8 text-emerald-600" />,
+			icon: <Car className="h-8 w-8 text-primary" />,
 			title: "Go for Ride",
 			description:
 				"Wait for a driver to accept your request. Track your ride in real-time and enjoy a comfortable journey to your destination.",
 			step: "03",
 		},
 		{
-			icon: <Navigation className="h-8 w-8 text-emerald-600" />,
+			icon: <Navigation className="h-8 w-8 text-primary" />,
 			title: "Reach Your Destination",
 			description:
 				"Arrive safely at your destination. Complete payment automatically and rate your experience to help improve our service.",
@@ -36,7 +36,7 @@ const Process = () => {
 	];
 
 	return (
-		<section className="py-20 bg-gradient-to-b from-background via-muted/30 to-background">
+		<section className="py-20 bg-gradient-to-b from-muted/70 via-transparent to-muted/70">
 			<div className="container mx-auto px-4">
 				<div className="text-center mb-16 animate-in fade-in slide-in-from-bottom-3 duration-700">
 					<h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-4">
