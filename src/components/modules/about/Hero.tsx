@@ -27,7 +27,7 @@ const Hero = () => {
 		},
 	];
 	return (
-		<section className="min-h-screen flex items-center bg-gradient-to-br from-background to-muted">
+		<section className="min-h-screen flex items-center bg-gradient-to-br from-background via-muted/80 to-background">
 			<div className="mx-auto container px-4">
 				<div className="grid lg:grid-cols-2 gap-16 items-center">
 					<div className="space-y-8">
