@@ -27,7 +27,7 @@ const Hero = () => {
 		},
 	];
 	return (
-		<section className="min-h-screen flex items-center bg-gradient-to-br from-background to-muted overflow-hidden">
+		<section className="min-h-screen flex items-center bg-gradient-to-br from-background to-muted">
 			<div className="mx-auto container px-4">
 				<div className="grid lg:grid-cols-2 gap-16 items-center">
 					<div className="space-y-8">
@@ -133,7 +133,7 @@ const Hero = () => {
 							</div>
 						</div>
 
-						<div className="absolute -top-6 -right-6 w-24 h-24 bg-gradient-to-br from-primary to-primary/80 rounded-2xl shadow-lg hidden sm:flex items-center justify-center transform rotate-12">
+						<div className="absolute -top-6 -right-5 w-24 h-24 bg-gradient-to-br from-primary to-primary/80 rounded-2xl shadow-lg hidden sm:flex items-center justify-center transform rotate-12">
 							<MapPin className="h-10 w-10 text-primary-foreground" />
 						</div>
 
