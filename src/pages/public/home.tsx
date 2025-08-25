@@ -1,4 +1,5 @@
 import Banner from "@/components/modules/home/Banner";
+import CallToAction from "@/components/modules/home/CallToAction";
 import Process from "@/components/modules/home/Process";
 import ServiceHighlights from "@/components/modules/home/ServiceHighlights";
 import Stats from "@/components/modules/home/Stats";
@@ -12,6 +13,7 @@ const Home = () => {
 			<Process />
 			<ServiceHighlights />
 			<Testimonials />
+			<CallToAction />
 		</main>
 	);
 };
