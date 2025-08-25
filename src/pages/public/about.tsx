@@ -1,3 +1,4 @@
+import Collaboration from "@/components/modules/about/Collaboration";
 import Hero from "@/components/modules/about/Hero";
 import Mission from "@/components/modules/about/Mission";
 import TeamProfile from "@/components/modules/about/TeamProfile";
@@ -8,6 +9,7 @@ const About = () => {
 			<Hero />
 			<Mission />
 			<TeamProfile />
+			<Collaboration />
 		</main>
 	);
 };
