@@ -5,6 +5,7 @@ import Register from "@/pages/auth/register";
 import Profile from "@/pages/dashboard/profile";
 import Block from "@/pages/error/block";
 import NotFound from "@/pages/error/notFound";
+import About from "@/pages/public/about";
 import Home from "@/pages/public/home";
 import { createBrowserRouter } from "react-router";
 
@@ -16,6 +17,10 @@ export const router = createBrowserRouter([
 			{
 				index: true,
 				Component: Home,
+			},
+			{
+				path: "/about",
+				Component: About,
 			},
 		],
 	},
