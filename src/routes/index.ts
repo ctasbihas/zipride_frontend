@@ -6,6 +6,7 @@ import Profile from "@/pages/dashboard/profile";
 import Block from "@/pages/error/block";
 import NotFound from "@/pages/error/notFound";
 import About from "@/pages/public/about";
+import Contact from "@/pages/public/contact";
 import Features from "@/pages/public/features";
 import Home from "@/pages/public/home";
 import { createBrowserRouter } from "react-router";
@@ -26,6 +27,10 @@ export const router = createBrowserRouter([
 			{
 				path: "/features",
 				Component: Features,
+			},
+			{
+				path: "/contact",
+				Component: Contact,
 			},
 		],
 	},
