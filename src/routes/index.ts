@@ -7,6 +7,7 @@ import Block from "@/pages/error/block";
 import NotFound from "@/pages/error/notFound";
 import About from "@/pages/public/about";
 import Contact from "@/pages/public/contact";
+import FAQ from "@/pages/public/FAQ";
 import Features from "@/pages/public/features";
 import Home from "@/pages/public/home";
 import { createBrowserRouter } from "react-router";
@@ -31,6 +32,10 @@ export const router = createBrowserRouter([
 			{
 				path: "/contact",
 				Component: Contact,
+			},
+			{
+				path: "/faq",
+				Component: FAQ,
 			},
 		],
 	},
