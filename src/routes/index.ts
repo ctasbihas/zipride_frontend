@@ -7,6 +7,7 @@ import ActiveRide from "@/pages/dashboard/rider/activeRide";
 import BookRide from "@/pages/dashboard/rider/bookRide";
 import Profile from "@/pages/dashboard/rider/profile";
 import RideHistory from "@/pages/dashboard/rider/rideHistory";
+import Settings from "@/pages/dashboard/rider/settings";
 import Block from "@/pages/error/block";
 import NotFound from "@/pages/error/notFound";
 import About from "@/pages/public/about";
@@ -78,6 +79,10 @@ export const router = createBrowserRouter([
 			{
 				path: "/dashboard/profile",
 				Component: Profile,
+			},
+			{
+				path: "/dashboard/settings",
+				Component: Settings,
 			},
 		],
 	},
