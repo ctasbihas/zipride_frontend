@@ -1,4 +1,5 @@
 import { useUserQuery } from "@/redux/features/auth/auth.api";
+import Analytics from "./admin/analytics";
 import DriverOverview from "./driver/overview";
 import RiderOverview from "./rider/overview";
 
@@ -7,7 +8,7 @@ const Dashboard = () => {
 
 	switch (data?.data?.role) {
 		case "admin":
-			return <div>Admin Dashboard</div>;
+			return <Analytics />;
 		case "rider":
 			return <RiderOverview />;
 		case "driver":
