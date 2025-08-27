@@ -1,41 +1,17 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 import RideHistoryFilters from "@/components/modules/dashboard/rider/RideHistoryFilters";
 import RideHistoryPagination from "@/components/modules/dashboard/rider/RideHistoryPagination";
 import RideHistoryTable from "@/components/modules/dashboard/rider/RideHistoryTable";
-
-// TODO: Replace with real data from backend
-const mockRides = [
-	{
-		id: "RIDE1234",
-		date: "2025-08-25",
-		from: "Banani",
-		to: "Dhanmondi",
-		fare: 320,
-		status: "Completed",
-	},
-	{
-		id: "RIDE1235",
-		date: "2025-08-20",
-		from: "Gulshan",
-		to: "Uttara",
-		fare: 450,
-		status: "Cancelled",
-	},
-	{
-		id: "RIDE1236",
-		date: "2025-08-18",
-		from: "Mirpur",
-		to: "Bashundhara",
-		fare: 390,
-		status: "Completed",
-	},
-];
+import { useMyRidesQuery } from "@/redux/features/ride/ride.api";
 
 const PAGE_SIZE = 5;
 
 const RiderRideHistory = () => {
+	const { data } = useMyRidesQuery(undefined);
+
 	const [search, setSearch] = useState("");
 	const [statusFilter, setStatusFilter] = useState("");
 	const [dateFilter, setDateFilter] = useState("");
@@ -47,12 +23,27 @@ const RiderRideHistory = () => {
 		setPage(1);
 	};
 
-	const filteredRides = mockRides.filter((ride) => {
+	// Map backend data to UI format
+	const rides = useMemo(() => {
+		if (!data?.data) return [];
+		return data.data.map((ride: any) => ({
+			id: ride._id,
+			date: ride.createdAt.slice(0, 10),
+			from: ride.from,
+			to: ride.to,
+			fare: ride.fare,
+			status:
+				ride.rideStatus.charAt(0).toUpperCase() +
+				ride.rideStatus.slice(1),
+		}));
+	}, [data]);
+
+	const filteredRides = rides.filter((ride: any) => {
 		const matchesSearch =
 			ride.from.toLowerCase().includes(search.toLowerCase()) ||
 			ride.to.toLowerCase().includes(search.toLowerCase());
 		const matchesStatus = statusFilter
-			? ride.status === statusFilter
+			? ride.status.toLowerCase() === statusFilter.toLowerCase()
 			: true;
 		const matchesDate = dateFilter ? ride.date === dateFilter : true;
 		const matchesFareMin = fareMin ? ride.fare >= Number(fareMin) : true;

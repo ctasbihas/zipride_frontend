@@ -9,25 +9,29 @@ import {
 	FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useBookRideMutation } from "@/redux/features/ride/ride.api";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router";
 import { toast } from "sonner";
 import { z } from "zod";
 
 const bookRideSchema = z.object({
 	from: z.string().min(2, "Pickup location is required"),
 	to: z.string().min(2, "Destination is required"),
-	passengers: z
+	passengers: z.coerce
 		.number()
 		.min(1, "At least 1 passenger required")
 		.max(6, "Max 6 passengers allowed"),
-	fare: z.number().min(10, "Minimum fare is 10"),
+	fare: z.coerce.number().min(10, "Minimum fare is 10"),
 });
 
 type BookRideFormValues = z.infer<typeof bookRideSchema>;
 
 const BookRide = () => {
-	const form = useForm<BookRideFormValues>({
+	const [bookRide] = useBookRideMutation();
+	const navigate = useNavigate();
+	const form = useForm({
 		resolver: zodResolver(bookRideSchema),
 		defaultValues: {
 			from: "",
@@ -37,15 +41,36 @@ const BookRide = () => {
 		},
 	});
 
-	const onSubmit = (data: BookRideFormValues) => {
-		// TODO: Integrate with backend API and redirect to waiting page
-		console.log(data);
-
-		toast.success("Ride request submitted!", {
-			position: "top-center",
-			richColors: true,
-		});
-		form.reset();
+	const onSubmit = async (data: BookRideFormValues) => {
+		try {
+			const response = await bookRide(data).unwrap();
+			console.log("Ride booked successfully:", response);
+			toast.success("Ride request submitted!", {
+				position: "top-center",
+				richColors: true,
+			});
+			navigate("/dashboard/active-ride", {
+				state: { rideId: response.data._id },
+			});
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		} catch (error: any) {
+			console.error("Error booking ride:", error);
+			if (error.data.statusCode === 403) {
+				toast.error(error.data.message, {
+					position: "top-center",
+					richColors: true,
+				});
+			} else {
+				toast.error(
+					error.data.message ||
+						"Failed to book ride. Please try again.",
+					{
+						position: "top-center",
+						richColors: true,
+					}
+				);
+			}
+		}
 	};
 
 	return (
@@ -107,6 +132,11 @@ const BookRide = () => {
 												max={6}
 												placeholder="1"
 												{...field}
+												value={
+													field.value !== undefined
+														? String(field.value)
+														: ""
+												}
 											/>
 										</FormControl>
 										<FormMessage />
@@ -125,6 +155,11 @@ const BookRide = () => {
 												min={10}
 												placeholder="100"
 												{...field}
+												value={
+													field.value !== undefined
+														? String(field.value)
+														: ""
+												}
 											/>
 										</FormControl>
 										<FormMessage />

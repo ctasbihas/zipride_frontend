@@ -1,49 +1,35 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { useMyRidesQuery } from "@/redux/features/ride/ride.api";
 import { Car } from "lucide-react";
 import { Link } from "react-router-dom";
 
-// TODO: Get data from server
-const stats = [
-	{
-		label: "Total Rides",
-		value: 25,
-		icon: <Car className="h-6 w-6 text-primary" />,
-	},
-	{
-		label: "Active Ride",
-		value: "None",
-		icon: <Car className="h-6 w-6 text-primary" />,
-	},
-];
-
 const RiderOverview = () => {
+	const { data } = useMyRidesQuery(undefined);
+
+	const totalRides = data?.data?.length || 0;
+
 	return (
 		<main className="py-8 px-4">
 			<h1 className="text-2xl font-bold mb-6">
 				Welcome to your Dashboard
 			</h1>
 			<div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-				{stats.map((stat, idx) => (
-					<Card
-						key={idx}
-						className="shadow-sm"
-					>
-						<CardContent className="flex items-center gap-4 p-6">
-							<div className="rounded-full bg-primary/10 p-3">
-								{stat.icon}
+				<Card className="shadow-sm">
+					<CardContent className="flex items-center gap-4 p-6">
+						<div className="rounded-full bg-primary/10 p-3">
+							<Car className="h-6 w-6 text-primary" />
+						</div>
+						<div>
+							<div className="text-2xl font-bold">
+								{totalRides}
 							</div>
-							<div>
-								<div className="text-2xl font-bold">
-									{stat.value}
-								</div>
-								<div className="text-muted-foreground text-sm">
-									{stat.label}
-								</div>
+							<div className="text-muted-foreground text-sm">
+								Total RIdes
 							</div>
-						</CardContent>
-					</Card>
-				))}
+						</div>
+					</CardContent>
+				</Card>
 			</div>
 
 			<div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
