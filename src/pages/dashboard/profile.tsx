@@ -6,6 +6,8 @@ const Profile = () => {
 	const { data } = useUserQuery(undefined);
 
 	switch (data?.data?.role) {
+		case "admin":
+			return <RiderProfile />;
 		case "rider":
 			return <RiderProfile />;
 		case "driver":

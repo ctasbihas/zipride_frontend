@@ -35,6 +35,11 @@ export const getNavigationLinks = (role: string) => {
 					path: "/dashboard/profile",
 					icon: <User className="h-5 w-5" />,
 				},
+				{
+					label: "Settings",
+					path: "/dashboard/settings",
+					icon: <Settings className="h-5 w-5" />,
+				},
 			];
 
 		case "driver":
@@ -68,6 +73,11 @@ export const getNavigationLinks = (role: string) => {
 					label: "Profile",
 					path: "/dashboard/profile",
 					icon: <User className="h-5 w-5" />,
+				},
+				{
+					label: "Settings",
+					path: "/dashboard/settings",
+					icon: <Settings className="h-5 w-5" />,
 				},
 			];
 
