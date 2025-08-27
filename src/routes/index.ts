@@ -3,6 +3,7 @@ import DashboardLayout from "@/components/layout/DashboardLayout";
 import Login from "@/pages/auth/login";
 import Register from "@/pages/auth/register";
 import Dashboard from "@/pages/dashboard/dashboard";
+import ActiveRide from "@/pages/dashboard/rider/activeRide";
 import BookRide from "@/pages/dashboard/rider/bookRide";
 import Block from "@/pages/error/block";
 import NotFound from "@/pages/error/notFound";
@@ -63,6 +64,10 @@ export const router = createBrowserRouter([
 			{
 				path: "/dashboard/book-ride",
 				Component: BookRide,
+			},
+			{
+				path: "/dashboard/active-ride",
+				Component: ActiveRide,
 			},
 		],
 	},
