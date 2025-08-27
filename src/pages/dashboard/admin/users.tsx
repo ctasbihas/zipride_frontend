@@ -15,6 +15,7 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
+import { useUsersQuery } from "@/redux/features/user/user.api";
 import React, { useEffect, useState } from "react";
 
 type UserRole = "rider" | "driver";
@@ -27,46 +28,8 @@ interface User {
 	isBlocked: boolean;
 }
 
-// TODO: users from backend
-const mockUsers: User[] = [
-	{
-		id: "1",
-		name: "Alice",
-		email: "alice@email.com",
-		role: "rider",
-		isBlocked: false,
-	},
-	{
-		id: "2",
-		name: "Bob",
-		email: "bob@email.com",
-		role: "driver",
-		isBlocked: false,
-	},
-	{
-		id: "3",
-		name: "Charlie",
-		email: "charlie@email.com",
-		role: "rider",
-		isBlocked: true,
-	},
-	{
-		id: "4",
-		name: "David",
-		email: "david@email.com",
-		role: "driver",
-		isBlocked: false,
-	},
-	{
-		id: "5",
-		name: "Eva",
-		email: "eva@email.com",
-		role: "driver",
-		isBlocked: true,
-	},
-];
-
 const Users: React.FC = () => {
+	const { data, isLoading } = useUsersQuery(undefined);
 	const [users, setUsers] = useState<User[]>([]);
 	const [search, setSearch] = useState("");
 	const [roleFilter, setRoleFilter] = useState<"all" | UserRole>("all");
@@ -75,8 +38,10 @@ const Users: React.FC = () => {
 	>("all");
 
 	useEffect(() => {
-		setUsers(mockUsers);
-	}, []);
+		if (!isLoading) {
+			setUsers(data?.data);
+		}
+	}, [data, isLoading]);
 
 	const handleBlockUnblock = (id: string) => {
 		// TODO

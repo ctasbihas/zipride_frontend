@@ -1,54 +1,9 @@
-import React, { useEffect, useState } from "react";
-
-// Mock data for demonstration
-const mockRides = [
-	{
-		id: "RIDE001",
-		date: "2024-06-01",
-		status: "Completed",
-		driver: "Alice Smith",
-		rider: "John Doe",
-		from: "Downtown",
-		to: "Airport",
-	},
-	{
-		id: "RIDE002",
-		date: "2024-06-02",
-		status: "Pending",
-		driver: "Bob Lee",
-		rider: "Jane Roe",
-		from: "Mall",
-		to: "University",
-	},
-	{
-		id: "RIDE003",
-		date: "2024-06-03",
-		status: "Cancelled",
-		driver: "Alice Smith",
-		rider: "Sam Green",
-		from: "Station",
-		to: "Hotel",
-	},
-];
-
-const statuses = ["All", "Completed", "Pending", "Cancelled"];
-const drivers = ["All", ...Array.from(new Set(mockRides.map((r) => r.driver)))];
-const riders = ["All", ...Array.from(new Set(mockRides.map((r) => r.rider)))];
-
-// Import shadcn/ui components
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import {
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-} from "@/components/ui/select";
+import { useRidesQuery } from "@/redux/features/ride/ride.api";
+import React from "react";
 
 const statusColor: Record<string, string> = {
 	Completed: "bg-green-100 text-green-700",
@@ -57,47 +12,9 @@ const statusColor: Record<string, string> = {
 };
 
 const Rides: React.FC = () => {
-	const [filters, setFilters] = useState({
-		date: "",
-		status: "All",
-		driver: "All",
-		rider: "All",
-	});
-	const [filteredRides, setFilteredRides] = useState(mockRides);
-
-	useEffect(() => {
-		let rides = mockRides;
-		if (filters.date) {
-			rides = rides.filter((r) => r.date === filters.date);
-		}
-		if (filters.status !== "All") {
-			rides = rides.filter((r) => r.status === filters.status);
-		}
-		if (filters.driver !== "All") {
-			rides = rides.filter((r) => r.driver === filters.driver);
-		}
-		if (filters.rider !== "All") {
-			rides = rides.filter((r) => r.rider === filters.rider);
-		}
-		setFilteredRides(rides);
-	}, [filters]);
-
-	const handleFilterChange = (name: string, value: string) => {
-		setFilters((prev) => ({
-			...prev,
-			[name]: value,
-		}));
-	};
-
-	const handleReset = () => {
-		setFilters({
-			date: "",
-			status: "All",
-			driver: "All",
-			rider: "All",
-		});
-	};
-
+	const { data: ridesRaw } = useRidesQuery(undefined);
+	const rides = ridesRaw?.data ?? [];
+	console.log(rides);
 	return (
 		<div className="max-h-screen py-10 px-2 md:px-8">
 			<div className="max-w-5xl mx-auto space-y-8">
@@ -107,104 +24,7 @@ const Rides: React.FC = () => {
 							Ride Oversight
 						</CardTitle>
 					</CardHeader>
-					<CardContent>
-						<form className="grid grid-cols-1 md:grid-cols-5 gap-4">
-							<div className="flex flex-col gap-1">
-								<Label htmlFor="date">Date</Label>
-								<Input
-									id="date"
-									type="date"
-									name="date"
-									value={filters.date}
-									onChange={(e) =>
-										handleFilterChange(
-											"date",
-											e.target.value
-										)
-									}
-								/>
-							</div>
-							<div className="flex flex-col gap-1">
-								<Label>Status</Label>
-								<Select
-									value={filters.status}
-									onValueChange={(v) =>
-										handleFilterChange("status", v)
-									}
-								>
-									<SelectTrigger>
-										<SelectValue placeholder="Status" />
-									</SelectTrigger>
-									<SelectContent>
-										{statuses.map((status) => (
-											<SelectItem
-												key={status}
-												value={status}
-											>
-												{status}
-											</SelectItem>
-										))}
-									</SelectContent>
-								</Select>
-							</div>
-							<div className="flex flex-col gap-1">
-								<Label>Driver</Label>
-								<Select
-									value={filters.driver}
-									onValueChange={(v) =>
-										handleFilterChange("driver", v)
-									}
-								>
-									<SelectTrigger>
-										<SelectValue placeholder="Driver" />
-									</SelectTrigger>
-									<SelectContent>
-										{drivers.map((driver) => (
-											<SelectItem
-												key={driver}
-												value={driver}
-											>
-												{driver}
-											</SelectItem>
-										))}
-									</SelectContent>
-								</Select>
-							</div>
-							<div className="flex flex-col gap-1">
-								<Label>Rider</Label>
-								<Select
-									value={filters.rider}
-									onValueChange={(v) =>
-										handleFilterChange("rider", v)
-									}
-								>
-									<SelectTrigger>
-										<SelectValue placeholder="Rider" />
-									</SelectTrigger>
-									<SelectContent>
-										{riders.map((rider) => (
-											<SelectItem
-												key={rider}
-												value={rider}
-											>
-												{rider}
-											</SelectItem>
-										))}
-									</SelectContent>
-								</Select>
-							</div>
-							<div className="flex flex-col gap-1 mt-6 md:mt-0">
-								<Button
-									variant="outline"
-									type="button"
-									onClick={handleReset}
-									className="w-full"
-								>
-									Reset
-								</Button>
-							</div>
-						</form>
-					</CardContent>
+					<CardContent>{/* Filtering form removed */}</CardContent>
 				</Card>
 
 				<Card className="shadow-lg border-0">
@@ -242,7 +62,7 @@ const Rides: React.FC = () => {
 									</tr>
 								</thead>
 								<tbody>
-									{filteredRides.length === 0 ? (
+									{rides.length === 0 ? (
 										<tr>
 											<td
 												colSpan={7}
@@ -252,16 +72,16 @@ const Rides: React.FC = () => {
 											</td>
 										</tr>
 									) : (
-										filteredRides.map((ride) => (
+										rides.map((ride: any) => (
 											<tr
-												key={ride.id}
+												key={ride._id}
 												className="hover:bg-muted/50 transition"
 											>
 												<td className="px-4 py-3 font-mono">
-													{ride.id}
+													{ride._id}
 												</td>
 												<td className="px-4 py-3">
-													{ride.date}
+													{ride.createdAt}
 												</td>
 												<td className="px-4 py-3">
 													<Badge
@@ -273,14 +93,14 @@ const Rides: React.FC = () => {
 																"bg-gray-100 text-gray-700")
 														}
 													>
-														{ride.status}
+														{ride.rideStatus}
 													</Badge>
 												</td>
 												<td className="px-4 py-3">
-													{ride.driver}
+													{ride.driver.name}
 												</td>
 												<td className="px-4 py-3">
-													{ride.rider}
+													{ride.rider.name}
 												</td>
 												<td className="px-4 py-3">
 													{ride.from}

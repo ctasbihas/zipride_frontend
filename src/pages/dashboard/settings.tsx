@@ -60,7 +60,6 @@ const Settings = () => {
 	});
 
 	const onPasswordSubmit = async (data: PasswordFormValues) => {
-		// TODO: Integrate with backend
 		try {
 			const result = await changePass(data).unwrap();
 

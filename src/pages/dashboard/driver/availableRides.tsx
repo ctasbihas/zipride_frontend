@@ -1,48 +1,29 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+	useAcceptRideMutation,
+	useAvailableRidesQuery,
+} from "@/redux/features/ride/ride.api";
 import { MapPin, User, Users } from "lucide-react";
-
-// TODO: Replace with real data from backend
-const mockAvailableRides = [
-	{
-		id: "REQ1001",
-		rider: "Ayesha Siddiqua",
-		pickup: "Gulshan 2",
-		destination: "Banani",
-		fare: 250,
-		passengers: 2,
-		status: "Pending",
-	},
-	{
-		id: "REQ1002",
-		rider: "Imran Hossain",
-		pickup: "Dhanmondi 27",
-		destination: "Mirpur 10",
-		fare: 320,
-		passengers: 1,
-		status: "Pending",
-	},
-	{
-		id: "REQ1003",
-		rider: "Fatema Begum",
-		pickup: "Uttara Sector 7",
-		destination: "Bashundhara",
-		fare: 400,
-		passengers: 3,
-		status: "Pending",
-	},
-];
+import { useNavigate } from "react-router";
+import { toast } from "sonner";
 
 const AvailableRides = () => {
-	// Accept/Reject handlers (to be implemented)
-	const handleAccept = (id: string) => {
-		// TODO: Integrate with backend
-		alert(`Accepted ride ${id}`);
-	};
-	const handleReject = (id: string) => {
-		// TODO: Integrate with backend
-		alert(`Rejected ride ${id}`);
+	const { data } = useAvailableRidesQuery(undefined);
+	const navigate = useNavigate();
+	const [acceptRide] = useAcceptRideMutation();
+	const rides = data?.data ?? [];
+
+	const handleAccept = async (id: string) => {
+		try {
+			await acceptRide(id).unwrap();
+			toast.success("Ride accepted successfully");
+			navigate("/dashboard/active-ride");
+		} catch (e: any) {
+			toast.error(e.message || "Failed to accept ride");
+		}
 	};
 
 	return (
@@ -52,14 +33,14 @@ const AvailableRides = () => {
 					<CardTitle>Available Rides</CardTitle>
 				</CardHeader>
 				<CardContent className="space-y-6">
-					{mockAvailableRides.length === 0 ? (
+					{rides.length === 0 ? (
 						<div className="text-center text-muted-foreground py-12">
 							No ride requests at the moment.
 						</div>
 					) : (
-						mockAvailableRides.map((ride) => (
+						rides.map((ride: any) => (
 							<Card
-								key={ride.id}
+								key={ride._id}
 								className="border border-border/50 shadow-sm"
 							>
 								<CardContent className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-4">
@@ -69,21 +50,21 @@ const AvailableRides = () => {
 											<span className="font-medium">
 												Rider:
 											</span>{" "}
-											{ride.rider}
+											{ride.rider?.name}
 										</div>
 										<div className="flex items-center gap-2">
 											<MapPin className="h-4 w-4 text-primary" />
 											<span className="font-medium">
 												From:
 											</span>{" "}
-											{ride.pickup}
+											{ride.from}
 										</div>
 										<div className="flex items-center gap-2">
 											<MapPin className="h-4 w-4 text-primary" />
 											<span className="font-medium">
 												To:
 											</span>{" "}
-											{ride.destination}
+											{ride.to}
 										</div>
 										<div className="flex items-center gap-2">
 											<Users className="h-4 w-4 text-primary" />
@@ -98,7 +79,7 @@ const AvailableRides = () => {
 											</span>{" "}
 											<span>৳{ride.fare}</span>
 											<Badge variant="secondary">
-												{ride.status}
+												{ride.rideStatus}
 											</Badge>
 										</div>
 									</div>
@@ -107,19 +88,10 @@ const AvailableRides = () => {
 											size="sm"
 											variant="default"
 											onClick={() =>
-												handleAccept(ride.id)
+												handleAccept(ride._id)
 											}
 										>
 											Accept
-										</Button>
-										<Button
-											size="sm"
-											variant="outline"
-											onClick={() =>
-												handleReject(ride.id)
-											}
-										>
-											Reject
 										</Button>
 									</div>
 								</CardContent>

@@ -35,6 +35,13 @@ export const authApi = baseApi.injectEndpoints({
 				data: payload,
 			}),
 		}),
+		updateProfile: builder.mutation({
+			query: (payload) => ({
+				url: `/user/${payload.id}`,
+				method: "PATCH",
+				data: payload,
+			}),
+		}),
 	}),
 });
 
@@ -44,4 +51,5 @@ export const {
 	useUserQuery,
 	useLogoutMutation,
 	useChangePasswordMutation,
+	useUpdateProfileMutation,
 } = authApi;

@@ -9,7 +9,10 @@ import {
 	FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useUserQuery } from "@/redux/features/auth/auth.api";
+import {
+	useUpdateProfileMutation,
+	useUserQuery,
+} from "@/redux/features/auth/auth.api";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -22,7 +25,8 @@ const profileSchema = z.object({
 type ProfileFormValues = z.infer<typeof profileSchema>;
 
 const RiderProfile = () => {
-	const { data } = useUserQuery(undefined);
+	const { data, refetch } = useUserQuery(undefined);
+	const [update] = useUpdateProfileMutation();
 	const user = data?.data;
 	const profileForm = useForm<ProfileFormValues>({
 		resolver: zodResolver(profileSchema),
@@ -31,13 +35,26 @@ const RiderProfile = () => {
 		},
 	});
 
-	const onProfileSubmit = (data: ProfileFormValues) => {
-		// TODO: Integrate with backend
-		console.log(data);
-		toast.success("Profile updated!", {
-			position: "top-center",
-			richColors: true,
-		});
+	const onProfileSubmit = async (data: ProfileFormValues) => {
+		const payload = {
+			id: user?._id,
+			...data,
+		};
+
+		try {
+			const result = await update(payload).unwrap();
+			refetch();
+			toast.success(result.message, {
+				position: "top-center",
+				richColors: true,
+			});
+			// eslint-disable-next-line @typescript-eslint/no-unused-vars
+		} catch (error) {
+			toast.error("Failed to update profile", {
+				position: "top-center",
+				richColors: true,
+			});
+		}
 	};
 
 	return (

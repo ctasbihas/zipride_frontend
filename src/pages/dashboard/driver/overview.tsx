@@ -1,46 +1,101 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
+import { useUserQuery } from "@/redux/features/auth/auth.api";
+import {
+	useEarningsSummaryQuery,
+	useToggleActiveMutation,
+} from "@/redux/features/driver/driver.api";
+import { useMyRidesQuery } from "@/redux/features/ride/ride.api";
 import { Car, DollarSign, History, User } from "lucide-react";
-import { useState } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
-// TODO: Data from backend
-const stats = [
-	{
-		label: "Total Rides",
-		value: 120, // TODO: Replace with real data
-		icon: <Car className="h-6 w-6 text-primary" />,
-	},
-	{
-		label: "Total Earnings",
-		value: "৳ 25,000", // TODO: Replace with real data
-		icon: <DollarSign className="h-6 w-6 text-primary" />,
-	},
-	{
-		label: "Last Ride",
-		value: "Today", // TODO: Replace with real data
-		icon: <History className="h-6 w-6 text-primary" />,
-	},
-];
+const getLastRideDate = (rides: any[]) => {
+	if (!rides || rides.length === 0) return "-";
+	const sorted = [...rides].sort(
+		(a, b) =>
+			new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+	);
+	const last = sorted[0];
+	const date = new Date(last.createdAt);
+	const today = new Date();
+	if (date.toDateString() === today.toDateString()) return "Today";
+	return date.toLocaleDateString();
+};
 
 const DriverOverview = () => {
-	const [isOnline, setIsOnline] = useState(true);
+	const { data: userData, refetch: refetchUser } = useUserQuery(undefined);
+	const [toggleActive, { isLoading: isToggling }] = useToggleActiveMutation();
+	// Use 'online'/'offline' string for activeStatus
+	const [activeStatus, setActiveStatus] = useState<string>(
+		userData?.data?.activeStatus ?? "online"
+	);
+	const { data: summaryData, isLoading: summaryLoading } =
+		useEarningsSummaryQuery(undefined);
+	const { data: ridesData, isLoading: ridesLoading } =
+		useMyRidesQuery(undefined);
+	const summary = summaryData?.data;
+	const rides = ridesData?.data || [];
+
+	// Update activeStatus when userData changes
+	React.useEffect(() => {
+		if (userData?.data?.activeStatus) {
+			setActiveStatus(userData.data.activeStatus);
+		}
+	}, [userData]);
+
+	// Switch expects boolean, but backend expects 'online'/'offline'
+	const handleToggle = async (checked: boolean) => {
+		const newStatus = checked ? "online" : "offline";
+		setActiveStatus(newStatus);
+		try {
+			await toggleActive({
+				id: userData?.data?._id,
+				activeStatus: newStatus,
+			}).unwrap();
+			refetchUser();
+		} catch (e) {
+			// Optionally show error
+			setActiveStatus(activeStatus === "online" ? "offline" : "online"); // revert on error
+			console.error(e);
+		}
+	};
+
+	const stats = [
+		{
+			label: "Total Rides",
+			value: summaryLoading ? "..." : summary?.totalRides ?? 0,
+			icon: <Car className="h-6 w-6 text-primary" />,
+		},
+		{
+			label: "Total Earnings",
+			value: summaryLoading ? "..." : `৳${summary?.monthEarnings ?? 0}`,
+			icon: <DollarSign className="h-6 w-6 text-primary" />,
+		},
+		{
+			label: "Last Ride",
+			value: ridesLoading ? "..." : getLastRideDate(rides),
+			icon: <History className="h-6 w-6 text-primary" />,
+		},
+	];
 
 	return (
 		<main className="py-8 px-4">
 			<h1 className="text-2xl font-bold mb-6">Welcome, Driver!</h1>
 			<div className="flex items-center gap-4 mb-8">
 				<Switch
-					checked={isOnline}
-					onCheckedChange={setIsOnline}
+					checked={activeStatus === "online"}
+					onCheckedChange={handleToggle}
 					id="online-toggle"
+					disabled={isToggling}
 				/>
 				<label
 					htmlFor="online-toggle"
 					className="font-medium"
 				>
-					{isOnline
+					{activeStatus === "online"
 						? "Online (Accepting rides)"
 						: "Offline (Not accepting rides)"}
 				</label>
