@@ -5,6 +5,7 @@ import Register from "@/pages/auth/register";
 import Dashboard from "@/pages/dashboard/dashboard";
 import ActiveRide from "@/pages/dashboard/rider/activeRide";
 import BookRide from "@/pages/dashboard/rider/bookRide";
+import Profile from "@/pages/dashboard/rider/profile";
 import RideHistory from "@/pages/dashboard/rider/rideHistory";
 import Block from "@/pages/error/block";
 import NotFound from "@/pages/error/notFound";
@@ -73,6 +74,10 @@ export const router = createBrowserRouter([
 			{
 				path: "/dashboard/ride-history",
 				Component: RideHistory,
+			},
+			{
+				path: "/dashboard/profile",
+				Component: Profile,
 			},
 		],
 	},
