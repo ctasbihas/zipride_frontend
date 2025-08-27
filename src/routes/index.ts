@@ -23,6 +23,7 @@ const AvailableRides = lazy(
 	() => import("@/pages/dashboard/driver/availableRides")
 );
 const Earnings = lazy(() => import("@/pages/dashboard/driver/earnings"));
+const Users = lazy(() => import("@/pages/dashboard/admin/users"));
 
 export const router = createBrowserRouter([
 	{
@@ -98,6 +99,10 @@ export const router = createBrowserRouter([
 			{
 				path: "/dashboard/earnings",
 				Component: withAuth(Earnings, ["driver"]),
+			},
+			{
+				path: "/dashboard/users",
+				Component: withAuth(Users, ["admin"]),
 			},
 		],
 	},
