@@ -97,7 +97,7 @@ const Sidebar = () => {
 						<Skeleton className="h-9 w-9 rounded-full bg-sidebar-foreground" />
 					) : (
 						<span className="grid h-9 w-9 place-items-center rounded-full bg-sidebar-foreground text-2xl font-bold text-sidebar">
-							{data.data.name.charAt(0).toUpperCase()}
+							{data?.data?.name.charAt(0).toUpperCase()}
 						</span>
 					)}
 					<div className="min-w-0 flex-1">
@@ -109,10 +109,10 @@ const Sidebar = () => {
 						) : (
 							<>
 								<h3 className="truncate text-sm font-medium">
-									{data.data.name}
+									{data?.data?.name}
 								</h3>
 								<h4 className="truncate text-xs text-muted-foreground">
-									{data.data.email}
+									{data?.data?.email}
 								</h4>
 							</>
 						)}

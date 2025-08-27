@@ -2,7 +2,7 @@ import App from "@/App";
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import Login from "@/pages/auth/login";
 import Register from "@/pages/auth/register";
-import Profile from "@/pages/dashboard/profile";
+import Dashboard from "@/pages/dashboard/dashboard";
 import Block from "@/pages/error/block";
 import NotFound from "@/pages/error/notFound";
 import About from "@/pages/public/about";
@@ -56,8 +56,8 @@ export const router = createBrowserRouter([
 		Component: DashboardLayout,
 		children: [
 			{
-				index: true,
-				Component: Profile,
+				path: "/dashboard",
+				Component: Dashboard,
 			},
 		],
 	},

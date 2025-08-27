@@ -16,7 +16,7 @@ export const getNavigationLinks = (role: string) => {
 		case "admin":
 			return [
 				{
-					label: "Overview",
+					label: "Analytics",
 					path: "/dashboard",
 					icon: <LayoutDashboard className="h-5 w-5" />,
 				},
