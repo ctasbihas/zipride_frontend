@@ -21,7 +21,7 @@ const profileSchema = z.object({
 
 type ProfileFormValues = z.infer<typeof profileSchema>;
 
-const Profile = () => {
+const RiderProfile = () => {
 	const { data } = useUserQuery(undefined);
 	const user = data?.data;
 	const profileForm = useForm<ProfileFormValues>({
@@ -109,4 +109,4 @@ const Profile = () => {
 	);
 };
 
-export default Profile;
+export default RiderProfile;

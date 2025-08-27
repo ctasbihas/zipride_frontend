@@ -17,7 +17,7 @@ const Dashboard = lazy(() => import("@/pages/dashboard/dashboard"));
 const BookRide = lazy(() => import("@/pages/dashboard/rider/bookRide"));
 const ActiveRide = lazy(() => import("@/pages/dashboard/activeRide"));
 const RideHistory = lazy(() => import("@/pages/dashboard/rideHistory"));
-const Profile = lazy(() => import("@/pages/dashboard/rider/profile"));
+const Profile = lazy(() => import("@/pages/dashboard/profile"));
 const Settings = lazy(() => import("@/pages/dashboard/rider/settings"));
 const AvailableRides = lazy(
 	() => import("@/pages/dashboard/driver/availableRides")
