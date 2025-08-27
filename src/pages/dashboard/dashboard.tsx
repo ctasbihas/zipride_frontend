@@ -1,4 +1,5 @@
 import { useUserQuery } from "@/redux/features/auth/auth.api";
+import DriverOverview from "./driver/overview";
 import RiderOverview from "./rider/overview";
 
 const Dashboard = () => {
@@ -10,7 +11,7 @@ const Dashboard = () => {
 		case "rider":
 			return <RiderOverview />;
 		case "driver":
-			return <div>Driver Dashboard</div>;
+			return <DriverOverview />;
 		default:
 			return null;
 	}
