@@ -2,6 +2,12 @@ import App from "@/App";
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import Login from "@/pages/auth/login";
 import Register from "@/pages/auth/register";
+import Dashboard from "@/pages/dashboard/dashboard";
+import AvailableRides from "@/pages/dashboard/driver/availableRides";
+import ActiveRide from "@/pages/dashboard/rider/activeRide";
+import BookRide from "@/pages/dashboard/rider/bookRide";
+import Profile from "@/pages/dashboard/rider/profile";
+import RideHistory from "@/pages/dashboard/rider/rideHistory";
 import Block from "@/pages/error/block";
 import NotFound from "@/pages/error/notFound";
 import About from "@/pages/public/about";
@@ -10,15 +16,8 @@ import FAQ from "@/pages/public/FAQ";
 import Features from "@/pages/public/features";
 import Home from "@/pages/public/home";
 import { withAuth } from "@/utils/withAuth";
-import { lazy } from "react";
+import { Settings } from "lucide-react";
 import { createBrowserRouter } from "react-router";
-
-const Dashboard = lazy(() => import("@/pages/dashboard/dashboard"));
-const BookRide = lazy(() => import("@/pages/dashboard/rider/bookRide"));
-const ActiveRide = lazy(() => import("@/pages/dashboard/rider/activeRide"));
-const RideHistory = lazy(() => import("@/pages/dashboard/rider/rideHistory"));
-const Profile = lazy(() => import("@/pages/dashboard/rider/profile"));
-const Settings = lazy(() => import("@/pages/dashboard/rider/settings"));
 
 export const router = createBrowserRouter([
 	{
@@ -64,7 +63,7 @@ export const router = createBrowserRouter([
 		Component: DashboardLayout,
 		children: [
 			{
-				path: "/dashboard",
+				index: true,
 				Component: withAuth(Dashboard),
 			},
 			{
@@ -86,6 +85,10 @@ export const router = createBrowserRouter([
 			{
 				path: "/dashboard/settings",
 				Component: withAuth(Settings, ["rider", "driver", "admin"]),
+			},
+			{
+				path: "/dashboard/available-rides",
+				Component: withAuth(AvailableRides, ["driver"]),
 			},
 		],
 	},

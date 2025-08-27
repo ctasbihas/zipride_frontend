@@ -14,7 +14,11 @@ export const withAuth = (Component: ComponentType, requiredRole?: string[]) => {
 			return <Navigate to="/login" />;
 		}
 
-		if (requiredRole && !isLoading && requiredRole !== data?.data?.role) {
+		if (
+			requiredRole &&
+			!isLoading &&
+			!requiredRole.includes(data?.data?.role)
+		) {
 			return <Navigate to="/dashboard" />;
 		} else {
 			return <Component />;
