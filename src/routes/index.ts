@@ -16,7 +16,7 @@ import { createBrowserRouter } from "react-router";
 const Dashboard = lazy(() => import("@/pages/dashboard/dashboard"));
 const BookRide = lazy(() => import("@/pages/dashboard/rider/bookRide"));
 const ActiveRide = lazy(() => import("@/pages/dashboard/activeRide"));
-const RideHistory = lazy(() => import("@/pages/dashboard/rider/rideHistory"));
+const RideHistory = lazy(() => import("@/pages/dashboard/rideHistory"));
 const Profile = lazy(() => import("@/pages/dashboard/rider/profile"));
 const Settings = lazy(() => import("@/pages/dashboard/rider/settings"));
 const AvailableRides = lazy(
@@ -81,7 +81,7 @@ export const router = createBrowserRouter([
 			},
 			{
 				path: "/dashboard/ride-history",
-				Component: withAuth(RideHistory, ["rider"]),
+				Component: withAuth(RideHistory, ["rider", "driver"]),
 			},
 			{
 				path: "/dashboard/profile",

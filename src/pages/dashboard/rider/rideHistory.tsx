@@ -35,7 +35,7 @@ const mockRides = [
 
 const PAGE_SIZE = 5;
 
-const RideHistory = () => {
+const RiderRideHistory = () => {
 	const [search, setSearch] = useState("");
 	const [statusFilter, setStatusFilter] = useState("");
 	const [dateFilter, setDateFilter] = useState("");
@@ -108,4 +108,4 @@ const RideHistory = () => {
 	);
 };
 
-export default RideHistory;
+export default RiderRideHistory;
