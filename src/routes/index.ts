@@ -2,12 +2,6 @@ import App from "@/App";
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import Login from "@/pages/auth/login";
 import Register from "@/pages/auth/register";
-import Dashboard from "@/pages/dashboard/dashboard";
-import ActiveRide from "@/pages/dashboard/rider/activeRide";
-import BookRide from "@/pages/dashboard/rider/bookRide";
-import Profile from "@/pages/dashboard/rider/profile";
-import RideHistory from "@/pages/dashboard/rider/rideHistory";
-import Settings from "@/pages/dashboard/rider/settings";
 import Block from "@/pages/error/block";
 import NotFound from "@/pages/error/notFound";
 import About from "@/pages/public/about";
@@ -15,7 +9,16 @@ import Contact from "@/pages/public/contact";
 import FAQ from "@/pages/public/FAQ";
 import Features from "@/pages/public/features";
 import Home from "@/pages/public/home";
+import { withAuth } from "@/utils/withAuth";
+import { lazy } from "react";
 import { createBrowserRouter } from "react-router";
+
+const Dashboard = lazy(() => import("@/pages/dashboard/dashboard"));
+const BookRide = lazy(() => import("@/pages/dashboard/rider/bookRide"));
+const ActiveRide = lazy(() => import("@/pages/dashboard/rider/activeRide"));
+const RideHistory = lazy(() => import("@/pages/dashboard/rider/rideHistory"));
+const Profile = lazy(() => import("@/pages/dashboard/rider/profile"));
+const Settings = lazy(() => import("@/pages/dashboard/rider/settings"));
 
 export const router = createBrowserRouter([
 	{
@@ -62,27 +65,27 @@ export const router = createBrowserRouter([
 		children: [
 			{
 				path: "/dashboard",
-				Component: Dashboard,
+				Component: withAuth(Dashboard),
 			},
 			{
 				path: "/dashboard/book-ride",
-				Component: BookRide,
+				Component: withAuth(BookRide, ["rider"]),
 			},
 			{
 				path: "/dashboard/active-ride",
-				Component: ActiveRide,
+				Component: withAuth(ActiveRide, ["rider"]),
 			},
 			{
 				path: "/dashboard/ride-history",
-				Component: RideHistory,
+				Component: withAuth(RideHistory, ["rider"]),
 			},
 			{
 				path: "/dashboard/profile",
-				Component: Profile,
+				Component: withAuth(Profile, ["rider", "driver", "admin"]),
 			},
 			{
 				path: "/dashboard/settings",
-				Component: Settings,
+				Component: withAuth(Settings, ["rider", "driver", "admin"]),
 			},
 		],
 	},

@@ -20,7 +20,7 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import { toast } from "sonner";
 import { z } from "zod";
 
@@ -58,6 +58,9 @@ const registerSchema = z
 	});
 
 const RegisterForm = () => {
+	const location = useLocation();
+	const role = new URLSearchParams(location.search).get("role");
+
 	const [isLoading, setIsLoading] = useState(false);
 	const [isVisible, setIsVisible] = useState<boolean>(false);
 	const [isConfirmVisible, setIsConfirmVisible] = useState<boolean>(false);
@@ -70,7 +73,7 @@ const RegisterForm = () => {
 			email: "",
 			password: "",
 			confirmPassword: "",
-			role: "rider",
+			role: role === "driver" ? "driver" : "rider",
 		},
 	});
 	const onSubmit = async (data: z.infer<typeof registerSchema>) => {
@@ -84,7 +87,7 @@ const RegisterForm = () => {
 				position: "top-center",
 			});
 
-			navigate("/dashboard");
+			navigate("/");
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		} catch (error: any) {
 			toast.error(error.data.message, {

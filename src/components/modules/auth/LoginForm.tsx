@@ -45,7 +45,7 @@ const LoginForm = () => {
 				position: "top-center",
 			});
 
-			navigate("/dashboard");
+			navigate("/");
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		} catch (error: any) {
 			const status = error.data.statusCode;
