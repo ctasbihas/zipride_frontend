@@ -18,7 +18,7 @@ export const driverApi = baseApi.injectEndpoints({
 			query: ({ id, activeStatus }) => ({
 				url: `/drivers/${id}`,
 				method: "PATCH",
-				body: { activeStatus },
+				data: { activeStatus },
 			}),
 		}),
 	}),

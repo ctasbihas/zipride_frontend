@@ -27,11 +27,11 @@ const getLastRideDate = (rides: any[]) => {
 
 const DriverOverview = () => {
 	const { data: userData, refetch: refetchUser } = useUserQuery(undefined);
-	const [toggleActive, { isLoading: isToggling }] = useToggleActiveMutation();
-	// Use 'online'/'offline' string for activeStatus
 	const [activeStatus, setActiveStatus] = useState<string>(
-		userData?.data?.activeStatus ?? "online"
+		userData?.data?.driverInfo.activeStatus
 	);
+
+	const [toggleActive, { isLoading: isToggling }] = useToggleActiveMutation();
 	const { data: summaryData, isLoading: summaryLoading } =
 		useEarningsSummaryQuery(undefined);
 	const { data: ridesData, isLoading: ridesLoading } =
@@ -49,7 +49,7 @@ const DriverOverview = () => {
 	// Switch expects boolean, but backend expects 'online'/'offline'
 	const handleToggle = async (checked: boolean) => {
 		const newStatus = checked ? "online" : "offline";
-		setActiveStatus(newStatus);
+
 		try {
 			await toggleActive({
 				id: userData?.data?._id,
@@ -57,21 +57,21 @@ const DriverOverview = () => {
 			}).unwrap();
 			refetchUser();
 		} catch (e) {
-			// Optionally show error
-			setActiveStatus(activeStatus === "online" ? "offline" : "online"); // revert on error
 			console.error(e);
+		} finally {
+			setActiveStatus(newStatus);
 		}
 	};
 
 	const stats = [
 		{
 			label: "Total Rides",
-			value: summaryLoading ? "..." : summary?.totalRides ?? 0,
+			value: summaryLoading ? "..." : summary?.totalRides,
 			icon: <Car className="h-6 w-6 text-primary" />,
 		},
 		{
 			label: "Total Earnings",
-			value: summaryLoading ? "..." : `৳${summary?.monthEarnings ?? 0}`,
+			value: summaryLoading ? "..." : `৳${summary?.totalEarnings}`,
 			icon: <DollarSign className="h-6 w-6 text-primary" />,
 		},
 		{
