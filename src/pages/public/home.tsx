@@ -1,3 +1,4 @@
+import AppShowcase from "@/components/modules/home/AppShowcase";
 import Banner from "@/components/modules/home/Banner";
 import CallToAction from "@/components/modules/home/CallToAction";
 import Process from "@/components/modules/home/Process";
@@ -14,6 +15,7 @@ const Home = () => {
 			<SafetyFeatures />
 			<Process />
 			<ServiceHighlights />
+			<AppShowcase />
 			<Testimonials />
 			<CallToAction />
 		</main>
