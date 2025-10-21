@@ -1,6 +1,6 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Link } from "react-router";
+import Link from "next/link";
 
 interface Ride {
 	id: string;
@@ -65,7 +65,9 @@ const RideHistoryTable = ({ rides }: RideHistoryTableProps) => {
 										size="sm"
 										variant="outline"
 									>
-										<Link to={`/dashboard/ride/${ride.id}`}>
+										<Link
+											href={`/dashboard/ride/${ride.id}`}
+										>
 											View Details
 										</Link>
 									</Button>

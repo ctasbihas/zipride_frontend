@@ -1,8 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { ArrowRight, MessageCircle } from "lucide-react";
-import { Link } from "react-router";
-
+import Link from "next/link";
 const Collaboration = () => {
 	return (
 		<section className="py-12 sm:py-16 md:py-20 bg-gradient-to-bl from-background via-muted/80 to-background">
@@ -30,7 +29,7 @@ const Collaboration = () => {
 								asChild
 							>
 								<Link
-									to="/contact"
+									href="/contact"
 									className="inline-flex items-center justify-center px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors duration-200 font-semibold"
 								>
 									Get In Touch

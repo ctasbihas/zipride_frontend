@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Car, MapPin, TrendingUp, Users } from "lucide-react";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 
 const Hero = () => {
 	// TODO: Get the actual valid data
@@ -27,7 +27,7 @@ const Hero = () => {
 		},
 	];
 	return (
-		<section className="min-h-screen flex items-center bg-gradient-to-br from-background via-muted/80 to-background">
+		<section className="min-h-screen flex items-center bg-gradient-to-br from-background via-muted/80 to-background overflow-hidden">
 			<div className="mx-auto container px-4">
 				<div className="grid lg:grid-cols-2 gap-16 items-center">
 					<div className="space-y-8">
@@ -72,7 +72,7 @@ const Hero = () => {
 								size="lg"
 								className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-4 text-lg font-semibold rounded-full shadow-lg hover:shadow-xl transition-all duration-300"
 							>
-								<Link to="/register">Get Started Today</Link>
+								<Link href="/register">Get Started Today</Link>
 							</Button>
 							<Button
 								asChild
@@ -80,7 +80,7 @@ const Hero = () => {
 								size="lg"
 								className="border-2 border-primary text-primary hover:bg-accent px-8 py-4 text-lg font-semibold rounded-full"
 							>
-								<Link to="/contact">Learn More</Link>
+								<Link href="/contact">Learn More</Link>
 							</Button>
 						</div>
 					</div>

@@ -1,3 +1,5 @@
+"use client";
+
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -14,8 +16,10 @@ import {
 } from "@/redux/features/auth/auth.api";
 import { useAppDispatch } from "@/redux/hook";
 import { LogOut, Menu, Shield, X } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
 import { toast } from "sonner";
 import { ThemeToggle } from "../ui/theme-toggle";
 
@@ -24,7 +28,7 @@ const Navbar = () => {
 	const { data, isSuccess } = useUserQuery(undefined);
 	const [logout] = useLogoutMutation();
 	const isAuthenticated = isSuccess && data.success;
-	const location = useLocation();
+	const pathname = usePathname();
 	const dispatch = useAppDispatch();
 
 	const handleLogout = async () => {
@@ -54,24 +58,27 @@ const Navbar = () => {
 	];
 
 	const isActiveLink = (path: string) => {
-		return location.pathname === path;
+		return pathname === path;
 	};
 
 	return (
 		<nav className="sticky top-0 z-50 w-full glass-card border-b border-border/50">
 			<div className="flex items-center justify-between h-16 container mx-auto px-4">
-				<Link
-					to="/"
-					className="text-xl font-bold"
-				>
-					ZipRide
+				<Link href="/">
+					<Image
+						src={"/ZipRide.png"}
+						alt="ZipRide Logo"
+						className="content-center"
+						width={100}
+						height={30}
+					/>
 				</Link>
 
 				<div className="hidden md:flex items-center space-x-8">
 					{navLinks.map((link) => (
 						<Link
 							key={link.path}
-							to={link.path}
+							href={link.path}
 							className={`text-sm font-medium transition-all hover:text-primary hover:border-b-2 border-primary ${
 								isActiveLink(link.path)
 									? "text-primary border-b-2"
@@ -86,7 +93,7 @@ const Navbar = () => {
 				<div className="hidden md:flex items-center space-x-4">
 					{isAuthenticated ? (
 						<div className="flex items-center space-x-4">
-							<Link to="/dashboard">
+							<Link href="/dashboard">
 								<Button
 									variant="outline"
 									size="sm"
@@ -144,7 +151,7 @@ const Navbar = () => {
 							</DropdownMenu>
 						</div>
 					) : (
-						<Link to="/login">
+						<Link href="/login">
 							<Button
 								variant="default"
 								size="sm"
@@ -187,7 +194,7 @@ const Navbar = () => {
 						{navLinks.map((link) => (
 							<Link
 								key={link.path}
-								to={link.path}
+								href={link.path}
 								className={`text-sm font-medium px-3 py-2 rounded-lg transition-colors ${
 									isActiveLink(link.path)
 										? "bg-primary/10 text-primary"
@@ -203,7 +210,7 @@ const Navbar = () => {
 							{isAuthenticated ? (
 								<div className="space-y-3">
 									<Link
-										to={"/dashboard"}
+										href={"/dashboard"}
 										className="flex items-center px-3 py-2 text-sm font-medium text-foreground/85 hover:bg-muted/70 hover:text-foreground rounded-lg transition-colors"
 										onClick={() => setIsOpen(false)}
 									>
@@ -224,7 +231,7 @@ const Navbar = () => {
 							) : (
 								<div className="space-y-3">
 									<Link
-										to="/login"
+										href="/login"
 										className="block px-3 py-2 text-sm font-medium text-foreground/85 hover:bg-muted/70 hover:text-foreground rounded-lg transition-colors"
 										onClick={() => setIsOpen(false)}
 									>

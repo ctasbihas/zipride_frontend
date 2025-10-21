@@ -1,8 +1,8 @@
-import BannerImage from "@/assets/banner.jpg";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Play } from "lucide-react";
-import { Link } from "react-router";
+import Image from "next/image";
+import Link from "next/link";
 
 const Banner = () => {
 	return (
@@ -36,9 +36,7 @@ const Banner = () => {
 
 						<h1 className="text-4xl font-bold leading-tight text-foreground lg:text-6xl">
 							Your Journey
-							<span className="block gradient-text-secondary">
-								Starts Here
-							</span>
+							<span className="block">Starts Here</span>
 						</h1>
 
 						<p className="mx-auto max-w-lg text-xl text-foreground/90 lg:mx-0">
@@ -54,7 +52,7 @@ const Banner = () => {
 								className="group relative h-12 rounded-full px-6 bg-gradient-to-r from-emerald-500 to-teal-600 text-white hover:from-emerald-600 hover:to-teal-700 shadow-lg shadow-emerald-500/25 ring-1 ring-emerald-400/40 focus-visible:ring-2 focus-visible:ring-emerald-500/60"
 							>
 								<Link
-									to="/register"
+									href="/register"
 									aria-label="Get started with ZipRide"
 								>
 									Get Started
@@ -87,12 +85,11 @@ const Banner = () => {
 					</div>
 
 					<div className="relative motion-safe:animate-float animate-in fade-in slide-in-from-bottom-2 duration-700">
-						<img
-							src={BannerImage}
+						<Image
+							src="/banner.jpg"
 							alt="Seamless ride booking with the ZipRide app"
-							loading="eager"
-							decoding="async"
-							fetchPriority="high"
+							width={200}
+							height={150}
 							className="aspect-[16/10] w-full rounded-3xl object-cover rotate-2 lg:rotate-3 shadow-2xl ring-1 ring-foreground/10 transition-transform duration-500 will-change-transform hover:scale-[1.01]"
 						/>
 					</div>

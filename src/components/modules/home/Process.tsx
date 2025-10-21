@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Car, MapPin, Navigation, UserPlus } from "lucide-react";
-import { Link } from "react-router";
+import Link from "next/link";
 
 const Process = () => {
 	const steps = [
@@ -91,14 +91,14 @@ const Process = () => {
 							size="lg"
 							className="bg-primary hover:bg-primary/90 text-primary-foreground"
 						>
-							<Link to="/register">Start Riding Today</Link>
+							<Link href="/register">Start Riding Today</Link>
 						</Button>
 						<Button
 							asChild
 							variant="outline"
 							size="lg"
 						>
-							<Link to="/register?role=driver">
+							<Link href="/register?role=driver">
 								Become a Driver
 							</Link>
 						</Button>

@@ -7,7 +7,8 @@ import {
 	Phone,
 	Twitter,
 } from "lucide-react";
-import { Link } from "react-router-dom";
+import Image from "next/image";
+import Link from "next/link";
 
 const Footer = () => {
 	const currentYear = new Date().getFullYear();
@@ -17,13 +18,16 @@ const Footer = () => {
 			<div className="container mx-auto px-4 py-16">
 				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
 					<div className="space-y-4">
-						<Link
-							to="/"
-							className="flex items-center space-x-2 text-xl font-bold"
-						>
-							ZipRide
+						<Link href="/">
+							<Image
+								src={"/ZipRide.png"}
+								alt="ZipRide Logo"
+								className="content-center"
+								width={120}
+								height={30}
+							/>
 						</Link>
-						<p className="text-muted-foreground text-sm">
+						<p className="text-muted-foreground text-sm mt-2">
 							Your trusted ride booking platform. Safe, reliable,
 							and convenient transportation at your fingertips.
 						</p>
@@ -62,7 +66,7 @@ const Footer = () => {
 						<ul className="space-y-2">
 							<li>
 								<Link
-									to="/about"
+									href="/about"
 									className="text-muted-foreground hover:text-primary transition-colors text-sm"
 								>
 									About Us
@@ -70,7 +74,7 @@ const Footer = () => {
 							</li>
 							<li>
 								<Link
-									to="/features"
+									href="/features"
 									className="text-muted-foreground hover:text-primary transition-colors text-sm"
 								>
 									Features
@@ -78,7 +82,7 @@ const Footer = () => {
 							</li>
 							<li>
 								<Link
-									to="/faq"
+									href="/faq"
 									className="text-muted-foreground hover:text-primary transition-colors text-sm"
 								>
 									FAQ
@@ -86,7 +90,7 @@ const Footer = () => {
 							</li>
 							<li>
 								<Link
-									to="/contact"
+									href="/contact"
 									className="text-muted-foreground hover:text-primary transition-colors text-sm"
 								>
 									Contact
@@ -102,7 +106,7 @@ const Footer = () => {
 						<ul className="space-y-2">
 							<li>
 								<Link
-									to="/register"
+									href="/register"
 									className="text-muted-foreground hover:text-primary transition-colors text-sm"
 								>
 									Become a Rider
@@ -110,7 +114,7 @@ const Footer = () => {
 							</li>
 							<li>
 								<Link
-									to="/register"
+									href="/register"
 									className="text-muted-foreground hover:text-primary transition-colors text-sm"
 								>
 									Drive with Us

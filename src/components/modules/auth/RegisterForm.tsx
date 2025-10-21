@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import {
 	Form,
@@ -18,9 +20,9 @@ import {
 	UserCheck,
 	Users,
 } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useLocation, useNavigate } from "react-router";
 import { toast } from "sonner";
 import { z } from "zod";
 
@@ -57,14 +59,11 @@ const registerSchema = z
 		message: "Passwords do not match",
 	});
 
-const RegisterForm = () => {
-	const location = useLocation();
-	const role = new URLSearchParams(location.search).get("role");
-
+const RegisterForm = ({ role }: { role: string }) => {
 	const [isLoading, setIsLoading] = useState(false);
 	const [isVisible, setIsVisible] = useState<boolean>(false);
 	const [isConfirmVisible, setIsConfirmVisible] = useState<boolean>(false);
-	const navigate = useNavigate();
+	const navigate = useRouter();
 	const [register] = useRegisterMutation();
 	const form = useForm<z.infer<typeof registerSchema>>({
 		resolver: zodResolver(registerSchema),
@@ -87,7 +86,7 @@ const RegisterForm = () => {
 				position: "top-center",
 			});
 
-			navigate("/");
+			navigate.push("/");
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		} catch (error: any) {
 			toast.error(error.data.message, {

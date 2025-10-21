@@ -1,7 +1,10 @@
+"use client";
+
 import { useUserQuery } from "@/redux/features/auth/auth.api";
 import { getNavigationLinks } from "@/utils/SidebarItems";
 import { Home } from "lucide-react";
-import { Link, useLocation } from "react-router";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Button } from "../ui/button";
 import { Separator } from "../ui/separator";
 import { Skeleton } from "../ui/skeleton";
@@ -24,12 +27,12 @@ type UserData = {
 
 const Sidebar = () => {
 	const { data, isLoading } = useUserQuery<UserData>(undefined);
-	const { pathname } = useLocation();
+	const pathname = usePathname();
 
 	const navigationLinks = getNavigationLinks(data?.data?.role || "");
 
 	return (
-		<aside className="flex flex-col min-h-screen min-w-60 border-r p-4 bg-sidebar text-sidebar-foreground border-sidebar-border">
+		<aside className="flex flex-col h-screen min-w-60 border-r p-4 bg-sidebar text-sidebar-foreground border-sidebar-border sticky top-0">
 			<div className="mb-6 flex items-center gap-3">
 				<div>
 					<h2 className="text-2xl font-semibold">ZipRide</h2>
@@ -43,7 +46,7 @@ const Sidebar = () => {
 						navigationLinks.map((link) => (
 							<li key={link.path}>
 								<Link
-									to={link.path}
+									href={link.path}
 									className={`group relative flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium hover:bg-sidebar-accent ${
 										pathname === link.path
 											? "bg-sidebar-accent"
@@ -84,7 +87,7 @@ const Sidebar = () => {
 						variant={"ghost"}
 						className="w-full justify-start"
 					>
-						<Link to="/">
+						<Link href="/">
 							<Home className="h-4 w-4" /> Home
 						</Link>
 					</Button>

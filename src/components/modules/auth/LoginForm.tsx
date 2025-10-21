@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import {
 	Form,
@@ -12,9 +14,10 @@ import { Input } from "@/components/ui/input";
 import { useLoginMutation } from "@/redux/features/auth/auth.api";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { EyeIcon, EyeOffIcon, Loader2Icon } from "lucide-react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { Link, useNavigate } from "react-router";
 import { toast } from "sonner";
 import { z } from "zod";
 
@@ -27,7 +30,7 @@ const LoginForm = () => {
 	const [isLoading, setIsLoading] = useState(false);
 	const [isVisible, setIsVisible] = useState<boolean>(false);
 	const [login] = useLoginMutation();
-	const navigate = useNavigate();
+	const router = useRouter();
 	const form = useForm<z.infer<typeof loginSchema>>({
 		resolver: zodResolver(loginSchema),
 		defaultValues: {
@@ -45,10 +48,11 @@ const LoginForm = () => {
 				position: "top-center",
 			});
 
-			navigate("/");
+			router.push("/");
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		} catch (error: any) {
 			const status = error.data.statusCode;
+			console.log(error);
 			if (status === 401) {
 				const message = "Invalid credentials";
 				form.setError("email", { type: "server", message });
@@ -58,7 +62,8 @@ const LoginForm = () => {
 					position: "top-center",
 					richColors: true,
 				});
-				navigate("/block", { state: { email: data.email } });
+				router.push("/block", { scroll: false });
+				history.pushState({ email: data.email }, "", "/block");
 			} else {
 				toast.error("Login failed", {
 					position: "top-center",
@@ -105,7 +110,7 @@ const LoginForm = () => {
 							<div className="flex items-center justify-between">
 								<FormLabel>Password</FormLabel>
 								<Link
-									to="/forgot-password"
+									href="/forgot-password"
 									className="text-sm text-muted-foreground hover:underline"
 								>
 									Forgot Password?

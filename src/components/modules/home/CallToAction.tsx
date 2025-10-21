@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
-import { Link } from "react-router";
+import Link from "next/link";
 
 const CallToAction = () => {
 	return (
@@ -20,7 +20,7 @@ const CallToAction = () => {
 						size="lg"
 						className="group"
 					>
-						<Link to="/register?role=rider">
+						<Link href="/register?role=rider">
 							Get Started as Rider
 							<ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
 						</Link>
@@ -32,7 +32,7 @@ const CallToAction = () => {
 						variant="outline"
 						className="group"
 					>
-						<Link to="/register?role=driver">
+						<Link href="/register?role=driver">
 							Start Driving
 							<ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
 						</Link>
