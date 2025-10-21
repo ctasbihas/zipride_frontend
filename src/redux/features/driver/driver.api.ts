@@ -7,12 +7,14 @@ export const driverApi = baseApi.injectEndpoints({
 				url: "/drivers/earnings/summary",
 				method: "GET",
 			}),
+			providesTags: ["Driver"],
 		}),
 		earningsChart: builder.query({
 			query: () => ({
 				url: "/drivers/earnings/chart",
 				method: "GET",
 			}),
+			providesTags: ["Driver"],
 		}),
 		toggleActive: builder.mutation({
 			query: ({ id, activeStatus }) => ({
@@ -20,6 +22,7 @@ export const driverApi = baseApi.injectEndpoints({
 				method: "PATCH",
 				data: { activeStatus },
 			}),
+			invalidatesTags: ["Driver", "User"],
 		}),
 	}),
 });

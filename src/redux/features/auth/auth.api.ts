@@ -8,6 +8,7 @@ export const authApi = baseApi.injectEndpoints({
 				method: "POST",
 				data: credentials,
 			}),
+			invalidatesTags: ["User"],
 		}),
 		register: builder.mutation({
 			query: (payload) => ({
@@ -15,18 +16,21 @@ export const authApi = baseApi.injectEndpoints({
 				method: "POST",
 				data: payload,
 			}),
+			invalidatesTags: ["User"],
 		}),
 		user: builder.query({
 			query: () => ({
 				url: "/user/me",
 				method: "GET",
 			}),
+			providesTags: ["User"],
 		}),
 		logout: builder.mutation({
 			query: () => ({
 				url: "/auth/logout",
 				method: "POST",
 			}),
+			invalidatesTags: ["User", "Rides", "Driver"],
 		}),
 		changePassword: builder.mutation({
 			query: (payload) => ({
@@ -41,6 +45,7 @@ export const authApi = baseApi.injectEndpoints({
 				method: "PATCH",
 				data: payload,
 			}),
+			invalidatesTags: ["User"],
 		}),
 	}),
 });

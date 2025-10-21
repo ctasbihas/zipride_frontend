@@ -7,12 +7,14 @@ export const rideApi = baseApi.injectEndpoints({
 				url: "/rides",
 				method: "GET",
 			}),
+			providesTags: ["Rides"],
 		}),
 		myRides: builder.query({
 			query: () => ({
 				url: "/rides/me",
 				method: "GET",
 			}),
+			providesTags: ["Ride"],
 		}),
 		bookRide: builder.mutation({
 			query: (rideData) => ({
@@ -20,30 +22,35 @@ export const rideApi = baseApi.injectEndpoints({
 				method: "POST",
 				data: rideData,
 			}),
+			invalidatesTags: ["Rides", "Ride"],
 		}),
 		activeRide: builder.query({
 			query: () => ({
 				url: `/rides/active`,
 				method: "GET",
 			}),
+			providesTags: ["Ride"],
 		}),
 		availableRides: builder.query({
 			query: () => ({
 				url: `/rides/available`,
 				method: "GET",
 			}),
+			providesTags: ["Rides"],
 		}),
 		acceptRide: builder.mutation({
 			query: (id: string) => ({
 				url: `/rides/${id}/accept`,
 				method: "PATCH",
 			}),
+			invalidatesTags: ["Rides", "Ride"],
 		}),
 		cancelRide: builder.mutation({
 			query: (id: string) => ({
 				url: `/rides/${id}/cancel`,
 				method: "PATCH",
 			}),
+			invalidatesTags: ["Rides", "Ride"],
 		}),
 		updateRideStatus: builder.mutation({
 			query: ({
@@ -57,6 +64,7 @@ export const rideApi = baseApi.injectEndpoints({
 				method: "PATCH",
 				data: { rideStatus },
 			}),
+			invalidatesTags: ["Rides", "Ride"],
 		}),
 	}),
 });
