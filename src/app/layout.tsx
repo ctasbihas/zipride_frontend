@@ -7,7 +7,7 @@ export const metadata: Metadata = {
 	description:
 		"ZipRide - Your Ultimate Ride-Sharing Companion. Seamlessly connect with drivers and passengers for a convenient and eco-friendly travel experience.",
 	icons: {
-		icon: "/z.png",
+		icon: "/z.ico",
 	},
 };
 
