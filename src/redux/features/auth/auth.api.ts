@@ -25,6 +25,21 @@ export const authApi = baseApi.injectEndpoints({
 			}),
 			providesTags: ["User"],
 		}),
+		blockUser: builder.mutation({
+			query: (id: string) => ({
+				url: `/user/block/${id}`,
+				method: "PATCH",
+			}),
+			invalidatesTags: ["User"],
+		}),
+		unblockUser: builder.mutation({
+			query: (payload) => ({
+				url: `/user/${payload.id}`,
+				method: "PATCH",
+				data: { isBlocked: false },
+			}),
+			invalidatesTags: ["User"],
+		}),
 		logout: builder.mutation({
 			query: () => ({
 				url: "/auth/logout",
@@ -54,6 +69,8 @@ export const {
 	useLoginMutation,
 	useRegisterMutation,
 	useUserQuery,
+	useBlockUserMutation,
+	useUnblockUserMutation,
 	useLogoutMutation,
 	useChangePasswordMutation,
 	useUpdateProfileMutation,

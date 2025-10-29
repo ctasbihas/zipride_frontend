@@ -17,7 +17,7 @@ export const getNavigationLinks = (role: string) => {
 			return [
 				{
 					label: "Analytics",
-					path: "/dashboard",
+					path: "/dashboard/admin/analytics",
 					icon: <LayoutDashboard className="h-5 w-5" />,
 				},
 				{
@@ -46,7 +46,7 @@ export const getNavigationLinks = (role: string) => {
 			return [
 				{
 					label: "Overview",
-					path: "/dashboard",
+					path: "/dashboard/driver/overview",
 					icon: <LayoutDashboard className="h-5 w-5" />,
 				},
 				{
@@ -85,7 +85,7 @@ export const getNavigationLinks = (role: string) => {
 			return [
 				{
 					label: "Dashboard",
-					path: "/dashboard",
+					path: "/dashboard/rider/overview",
 					icon: <UserCircle2 className="h-5 w-5" />,
 				},
 				{

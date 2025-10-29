@@ -17,13 +17,18 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
+import {
+	useBlockUserMutation,
+	useUnblockUserMutation,
+} from "@/redux/features/auth/auth.api";
 import { useUsersQuery } from "@/redux/features/user/user.api";
 import React, { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 type UserRole = "rider" | "driver";
 
 interface User {
-	id: string;
+	_id: string;
 	name: string;
 	email: string;
 	role: UserRole;
@@ -32,6 +37,8 @@ interface User {
 
 const Users: React.FC = () => {
 	const { data, isLoading } = useUsersQuery(undefined);
+	const [blockUser] = useBlockUserMutation();
+	const [unblockUser] = useUnblockUserMutation();
 	const [users, setUsers] = useState<User[]>([]);
 	const [search, setSearch] = useState("");
 	const [roleFilter, setRoleFilter] = useState<"all" | UserRole>("all");
@@ -45,13 +52,33 @@ const Users: React.FC = () => {
 		}
 	}, [data, isLoading]);
 
-	const handleBlockUnblock = (id: string) => {
-		// TODO
-		setUsers((prev) =>
-			prev.map((user) =>
-				user.id === id ? { ...user, isBlocked: !user.isBlocked } : user
-			)
-		);
+	const handleBlockUnblock = async (id: string) => {
+		const user = users.find((user) => user._id === id);
+		if (user?.isBlocked) {
+			const res = await unblockUser({ id });
+			if (res.data.success) {
+				setUsers((prev) =>
+					prev.map((user) =>
+						user._id === id ? { ...user, isBlocked: false } : user
+					)
+				);
+			} else {
+				toast.error("Failed to unblock user");
+			}
+		} else {
+			const res = await blockUser(id);
+			if (res.data.success) {
+				setUsers((prev) =>
+					prev.map((user) =>
+						user._id === id
+							? { ...user, isBlocked: !user.isBlocked }
+							: user
+					)
+				);
+			} else {
+				toast.error("Failed to block user");
+			}
+		}
 	};
 
 	const filteredUsers = users.filter((user) => {
@@ -131,7 +158,7 @@ const Users: React.FC = () => {
 						</TableRow>
 					) : (
 						filteredUsers.map((user) => (
-							<TableRow key={user.id}>
+							<TableRow key={user.email}>
 								<TableCell>{user.name}</TableCell>
 								<TableCell>{user.email}</TableCell>
 								<TableCell className="capitalize">
@@ -148,7 +175,7 @@ const Users: React.FC = () => {
 												: "default"
 										}
 										onClick={() =>
-											handleBlockUnblock(user.id)
+											handleBlockUnblock(user._id)
 										}
 										className="w-24"
 									>
