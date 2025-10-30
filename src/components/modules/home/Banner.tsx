@@ -1,26 +1,98 @@
+"use client";
+
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Play } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect, useState } from "react";
+
+const animationDuration = 2500;
+const delayOffset = 100;
+const carSize = 800;
 
 const Banner = () => {
+	const [isLoading, setIsLoading] = useState(true);
+	const [carPosition, setCarPosition] = useState(-50);
+	const [showCar, setShowCar] = useState(true);
+	const [imageLoaded, setImageLoaded] = useState(false);
+
+	useEffect(() => {
+		if (!imageLoaded) return;
+
+		const startTime = Date.now();
+		const easeIn = (t: number) => t * t * t;
+
+		const animate = () => {
+			const elapsed = Date.now() - startTime;
+			const linearProgress = Math.min(elapsed / animationDuration, 1);
+			const easedProgress = easeIn(linearProgress);
+			const position = -50 + easedProgress * 200;
+
+			setCarPosition(position);
+
+			if (linearProgress < 1) {
+				requestAnimationFrame(animate);
+			} else {
+				setTimeout(() => {
+					setShowCar(false);
+					setIsLoading(false);
+				}, 100);
+			}
+		};
+
+		animate();
+	}, [imageLoaded]);
+
+	const revealProgress = Math.max(
+		0,
+		Math.min(100, carPosition + 100 - delayOffset)
+	);
+
 	return (
 		<section className="relative overflow-hidden bg-gradient-to-br from-background via-muted to-background">
+			{showCar && (
+				<div
+					className="absolute inset-y-0 z-[60] flex items-center pointer-events-none"
+					style={{
+						left: `${carPosition}%`,
+						width: `${carSize}px`,
+						flexShrink: 0,
+					}}
+				>
+					<Image
+						src="/bannerCar.png"
+						alt="Car revealing content"
+						width={carSize}
+						height={carSize}
+						className="object-fill flex-shrink-0"
+						style={{
+							height: `${carSize}px`,
+							width: `${carSize}px`,
+						}}
+						onLoad={() => setImageLoaded(true)}
+						priority
+					/>
+				</div>
+			)}
+
 			<div
 				aria-hidden="true"
 				className="pointer-events-none absolute -top-24 -left-24 h-72 w-72 rounded-full bg-emerald-400/20 blur-3xl motion-safe:animate-blob"
 			/>
 			<div
 				aria-hidden="true"
-				className="pointer-events-none absolute -bottom-24 -right-16 h-80 w-80 rounded-full bg-teal-400/20 blur-3xl motion-safe:animate-blob motion-safe:[animation-delay:1.2s]"
-			/>
-			<div
-				aria-hidden="true"
 				className="pointer-events-none absolute top-1/3 -right-20 h-72 w-72 rounded-full bg-emerald-300/10 blur-3xl motion-safe:animate-blob motion-safe:[animation-delay:2.4s]"
 			/>
 
-			<div className="container mx-auto px-4 py-20 lg:py-32">
+			<div
+				className="container mx-auto px-4 py-20 lg:py-32"
+				style={{
+					clipPath: isLoading
+						? `inset(0 ${100 - revealProgress}% 0 0)`
+						: "none",
+				}}
+			>
 				<div className="grid items-center gap-12 lg:grid-cols-2">
 					<div className="text-center lg:text-left animate-in fade-in slide-in-from-bottom-2 duration-700 space-y-4">
 						<Badge
@@ -63,7 +135,6 @@ const Banner = () => {
 								</Link>
 							</Button>
 
-							{/* TODO: Show a video of the ZipRide app */}
 							<Button
 								size="lg"
 								variant="outline"
