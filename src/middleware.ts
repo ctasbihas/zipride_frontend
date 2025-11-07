@@ -74,15 +74,21 @@ function hasRoleAccess(pathname: string, userRole?: string): boolean {
 } */
 
 export async function middleware(request: NextRequest) {
-	const { pathname } = request.nextUrl;
-	const protectedRoutes = "/dashboard";
-	const token = request.cookies.get("token")?.value;
-	console.log(token);
+	try {
+		const { pathname } = request.nextUrl;
+		const protectedRoutes = "/dashboard";
+		const token = request.cookies.get("token")?.value;
+		console.log(token);
 
-	if (pathname.startsWith(protectedRoutes)) {
-		if (!token) {
-			return NextResponse.redirect(new URL("/login", request.url));
+		if (pathname.startsWith(protectedRoutes)) {
+			if (!token) {
+				return NextResponse.redirect(new URL("/login", request.url));
+			}
 		}
+		return NextResponse.next();
+	} catch (error) {
+		console.log("Middleware error: ", error);
+		return NextResponse.redirect(new URL("/login", request.url));
 	}
 
 	/* const isProtectedRoute = isRouteMatch(pathname, PROTECTED_ROUTES);
@@ -124,10 +130,8 @@ export async function middleware(request: NextRequest) {
 			new URL(getRoleDashboard(userData?.role), request.url)
 		);
 	} */
-
-	return NextResponse.next();
 }
 
 export const config = {
-	matcher: ["/:path*"],
+	matcher: ["/dashboard"],
 };
