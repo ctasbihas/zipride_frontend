@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-// Constants
+/* // Constants
 const PROTECTED_ROUTES = ["/dashboard"];
 const AUTH_ROUTES = ["/login", "/register"];
 
@@ -71,15 +71,24 @@ function hasRoleAccess(pathname: string, userRole?: string): boolean {
 	if (!allowedRoles) return true; // No restrictions
 	if (!userRole) return false;
 	return allowedRoles.includes(userRole.toLowerCase());
-}
+} */
 
 export async function middleware(request: NextRequest) {
 	const { pathname } = request.nextUrl;
+	console.log(pathname, request.cookies);
+	const protectedRoutes = ["/dashboard"];
 
-	const isProtectedRoute = isRouteMatch(pathname, PROTECTED_ROUTES);
+	if (protectedRoutes.some((route) => pathname.startsWith(route))) {
+		const token = request.cookies.get("token");
+		if (!token) {
+			return NextResponse.redirect(new URL("/login", request.url));
+		}
+	}
+
+	/* const isProtectedRoute = isRouteMatch(pathname, PROTECTED_ROUTES);
 	const isAuthRoute = isRouteMatch(pathname, AUTH_ROUTES);
 
-	const token = request.cookies.get("zr-token")?.value;
+	const token = request.cookies.get("token")?.value;
 	const { isAuthenticated, userData } = token
 		? await validateToken(token)
 		: { isAuthenticated: false, userData: null };
@@ -106,7 +115,6 @@ export async function middleware(request: NextRequest) {
 		);
 	}
 
-	// Role-based access control
 	if (
 		isProtectedRoute &&
 		isAuthenticated &&
@@ -115,13 +123,11 @@ export async function middleware(request: NextRequest) {
 		return NextResponse.redirect(
 			new URL(getRoleDashboard(userData?.role), request.url)
 		);
-	}
+	} */
 
 	return NextResponse.next();
 }
 
 export const config = {
-	matcher: [
-		"/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
-	],
+	matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
 };
