@@ -75,11 +75,11 @@ function hasRoleAccess(pathname: string, userRole?: string): boolean {
 
 export async function middleware(request: NextRequest) {
 	const { pathname } = request.nextUrl;
-	console.log(pathname, request.cookies);
-	const protectedRoutes = ["/dashboard"];
+	const protectedRoutes = "/dashboard";
+	const token = request.cookies.get("token")?.value;
+	console.log(token);
 
-	if (protectedRoutes.some((route) => pathname.startsWith(route))) {
-		const token = request.cookies.get("token");
+	if (pathname.startsWith(protectedRoutes)) {
 		if (!token) {
 			return NextResponse.redirect(new URL("/login", request.url));
 		}
@@ -129,5 +129,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-	matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
+	matcher: ["/:path*"],
 };
