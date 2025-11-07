@@ -78,7 +78,7 @@ export async function middleware(request: NextRequest) {
 		const { pathname } = request.nextUrl;
 		const protectedRoutes = "/dashboard";
 		const token = request.cookies.get("token")?.value;
-		console.log(token);
+		console.log(request.cookies.get("token"));
 
 		if (pathname.startsWith(protectedRoutes)) {
 			if (!token) {
@@ -133,5 +133,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-	matcher: ["/dashboard"],
+	matcher: ["/dashboard/:path*"],
 };
