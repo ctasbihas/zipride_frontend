@@ -79,7 +79,7 @@ export async function middleware(request: NextRequest) {
 	const isProtectedRoute = isRouteMatch(pathname, PROTECTED_ROUTES);
 	const isAuthRoute = isRouteMatch(pathname, AUTH_ROUTES);
 
-	const token = request.cookies.get("token")?.value;
+	const token = request.cookies.get("zr-token")?.value;
 	const { isAuthenticated, userData } = token
 		? await validateToken(token)
 		: { isAuthenticated: false, userData: null };
